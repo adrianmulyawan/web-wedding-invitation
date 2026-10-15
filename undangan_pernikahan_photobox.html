@@ -1,0 +1,1553 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Wedding of Rama & Sinta — Interactive Retro Photobox</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Playfair+Display:ital,wght@0,500;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cream: '#F6F1E7',
+                        ivory: '#FCFBF7',
+                        terracotta: '#B84A39',
+                        charcoal: '#1F1D1A',
+                        gold: '#C99E5A',
+                        sage: '#6E7E6A',
+                        dustypink: '#E6CCD2'
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        mono: ['"Courier Prime"', 'monospace'],
+                        hand: ['"Caveat"', 'cursive'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Film Grain Overlay */
+        .film-grain {
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+        }
+
+        /* Curtain Texture */
+        .velvet-curtain {
+            background: repeating-linear-gradient(
+                90deg,
+                #7f1d1d 0px,
+                #991b1b 18px,
+                #450a0a 36px,
+                #7f1d1d 54px
+            );
+            box-shadow: inset 0 0 40px rgba(0,0,0,0.8);
+        }
+
+        /* Photostrip Print Drop Animation */
+        @keyframes printStrip {
+            0% {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        .animate-print {
+            animation: printStrip 2.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        /* Coin Drop Animation */
+        @keyframes coinDrop {
+            0% { transform: translateY(-30px) scale(1); opacity: 1; }
+            70% { transform: translateY(15px) scale(0.95); opacity: 1; }
+            100% { transform: translateY(25px) scale(0.4); opacity: 0; }
+        }
+        .animate-coin {
+            animation: coinDrop 0.6s ease-in forwards;
+        }
+
+        /* Vinyl Spin */
+        @keyframes spinSlow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .spin-vinyl {
+            animation: spinSlow 6s linear infinite;
+        }
+
+        /* Washi Tape */
+        .washi-tape {
+            background-color: rgba(235, 213, 179, 0.78);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+            border-left: 2px dashed rgba(255,255,255,0.6);
+            border-right: 2px dashed rgba(255,255,255,0.6);
+        }
+
+        /* Corkboard Pattern */
+        .corkboard {
+            background-color: #b58858;
+            background-image: radial-gradient(#8c6239 1.2px, transparent 1.2px), radial-gradient(#d4a878 1.2px, #b58858 1.2px);
+            background-size: 24px 24px;
+            background-position: 0 0, 12px 12px;
+            box-shadow: inset 0 0 35px rgba(0,0,0,0.55);
+        }
+
+        /* Photo Filters for Main Invitation */
+        .filter-warm { filter: sepia(0.18) contrast(1.04) brightness(1.02) saturate(1.1); }
+        .filter-bw { filter: grayscale(1) contrast(1.2) brightness(0.98); }
+        .filter-sepia { filter: sepia(0.75) contrast(1.1) brightness(0.95); }
+        .filter-90s { filter: contrast(1.15) saturate(0.85) hue-rotate(-8deg) brightness(1.04); }
+
+        /* Photostrip Paper Themes */
+        .strip-ivory { background-color: #FCFBF7; color: #1F1D1A; border-color: #E5E0D5; }
+        .strip-midnight { background-color: #1A1918; color: #F6F1E7; border-color: #33312E; }
+        .strip-pink { background-color: #F4E1E4; color: #2D1E20; border-color: #E2C6CB; }
+        .strip-sage { background-color: #DCE3D8; color: #1E261D; border-color: #C2CEC0; }
+
+        /* Quartz Camera Timestamp */
+        .quartz-stamp {
+            color: #FF6B2B;
+            text-shadow: 0 0 6px rgba(255, 107, 43, 0.75);
+            font-family: 'Courier Prime', monospace;
+            letter-spacing: 2px;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #1F1D1A; }
+        ::-webkit-scrollbar-thumb { background: #B84A39; border-radius: 3px; }
+    </style>
+</head>
+<body class="bg-charcoal text-charcoal font-sans antialiased overflow-x-hidden selection:bg-terracotta selection:text-white">
+
+    <!-- Film Grain Global Overlay -->
+    <div class="fixed inset-0 pointer-events-none z-50 film-grain"></div>
+
+    <!-- Camera Flash Effect Overlay -->
+    <div id="flash-overlay" class="fixed inset-0 bg-white pointer-events-none opacity-0 transition-opacity duration-500 z-[90]"></div>
+
+    <!-- Top Floating Audio & SFX Controls -->
+    <div class="fixed top-4 right-4 z-40 flex items-center gap-2">
+        <button id="btn-sfx" onclick="toggleSFX()" class="bg-charcoal/85 backdrop-blur-md text-cream border border-gold/40 px-3 py-1.5 rounded-full text-xs font-mono flex items-center gap-1.5 shadow-lg hover:border-gold transition cursor-pointer">
+            <span id="sfx-icon">🔊</span> <span id="sfx-label">SFX: ON</span>
+        </button>
+    </div>
+
+    <!-- Floating Vinyl Music Player -->
+    <div id="vinyl-player" class="fixed bottom-5 left-5 z-40 hidden items-center gap-2.5 bg-charcoal/90 backdrop-blur-md border border-gold/40 p-2 pr-4 rounded-full shadow-2xl text-cream">
+        <button onclick="toggleMusic()" class="relative w-11 h-11 rounded-full bg-zinc-900 border-2 border-gold flex items-center justify-center shadow-inner overflow-hidden group cursor-pointer">
+            <div id="vinyl-disc" class="w-full h-full rounded-full flex items-center justify-center spin-vinyl" style="background: repeating-radial-gradient(#111 0px, #111 2px, #2a2a2a 3px, #111 4px);">
+                <div class="w-4 h-4 rounded-full bg-terracotta border border-gold flex items-center justify-center">
+                    <div class="w-1.5 h-1.5 rounded-full bg-cream"></div>
+                </div>
+            </div>
+        </button>
+        <div class="text-left">
+            <p class="text-[10px] font-mono uppercase tracking-widest text-gold">Vinyl Box</p>
+            <p id="music-status" class="text-xs font-medium truncate max-w-[110px]">Romantic Waltz</p>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SECTION 1: 3D RETRO PHOTOBOX COVER         -->
+    <!-- ========================================== -->
+    <section id="photobox-cover" class="min-h-screen w-full flex flex-col items-center justify-center relative px-4 py-8 overflow-hidden bg-gradient-to-b from-zinc-950 via-charcoal to-zinc-900">
+        
+        <!-- Velvet Curtains Left & Right -->
+        <div class="fixed top-0 left-0 bottom-0 w-10 md:w-28 velvet-curtain z-10 pointer-events-none border-r-2 border-gold/30"></div>
+        <div class="fixed top-0 right-0 bottom-0 w-10 md:w-28 velvet-curtain z-10 pointer-events-none border-l-2 border-gold/30"></div>
+
+        <!-- Photobox Machine Cabinet -->
+        <div class="relative z-20 w-full max-w-md bg-gradient-to-b from-zinc-800 via-zinc-900 to-zinc-950 border-4 border-gold/70 rounded-3xl p-5 md:p-7 shadow-[0_25px_70px_rgba(0,0,0,0.85)]">
+            
+            <!-- Top Illuminated Signboard -->
+            <div class="bg-cream border-2 border-charcoal rounded-xl p-3 text-center shadow-inner relative overflow-hidden mb-5">
+                <div class="absolute -top-6 -left-6 w-16 h-16 bg-gold/20 rounded-full blur-xl"></div>
+                <p class="font-mono text-[10px] tracking-[0.25em] uppercase text-terracotta font-bold">★ ANALOG STUDIO BOOTH ★</p>
+                <h1 class="font-serif text-2xl md:text-3xl font-bold text-charcoal tracking-wide mt-0.5">Rama & Sinta</h1>
+                <p class="font-mono text-[11px] text-zinc-600">24 . 10 . 2026 — THE WEDDING</p>
+            </div>
+
+            <!-- Camera Lens & Status LEDs -->
+            <div class="flex items-center justify-between bg-zinc-950 border border-zinc-700 rounded-2xl px-4 py-3 mb-4">
+                <!-- Ready Indicator -->
+                <div class="flex items-center gap-2">
+                    <span id="led-ready" class="w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981] animate-pulse"></span>
+                    <span class="font-mono text-[11px] text-zinc-300 uppercase">Ready</span>
+                </div>
+
+                <!-- 35mm Camera Lens -->
+                <div class="relative w-14 h-14 rounded-full bg-gradient-to-tr from-zinc-800 to-zinc-600 p-1.5 shadow-lg border border-zinc-500 flex items-center justify-center">
+                    <div class="w-full h-full rounded-full bg-zinc-950 border-2 border-zinc-700 flex items-center justify-center relative overflow-hidden">
+                        <div class="w-5 h-5 rounded-full bg-indigo-950/90 border border-indigo-400/30 flex items-center justify-center">
+                            <div class="w-2 h-2 rounded-full bg-white/60 -translate-x-1 -translate-y-1"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Print Indicator -->
+                <div class="flex items-center gap-2">
+                    <span class="font-mono text-[11px] text-zinc-300 uppercase">Print</span>
+                    <span id="led-print" class="w-3 h-3 rounded-full bg-zinc-700 transition-colors"></span>
+                </div>
+            </div>
+
+            <!-- Viewfinder Screen -->
+            <div class="relative w-full aspect-[4/3] bg-zinc-950 rounded-xl border-2 border-gold/50 overflow-hidden mb-5 shadow-inner group">
+                <!-- Default Cover Image -->
+                <img id="cover-preview-img" src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=900&q=80" alt="Rama & Sinta" onerror="this.src='https://placehold.co/800x600/27272a/F6F1E7?text=Rama+%26+Sinta'" class="w-full h-full object-cover filter-warm transition duration-500">
+                
+                <!-- Live Camera Mirror Video -->
+                <video id="cover-mirror-video" autoplay playsinline muted class="hidden w-full h-full object-cover scale-x-[-1]"></video>
+
+                <!-- Viewfinder Crosshair & Frame Guides -->
+                <div class="absolute inset-3 border border-white/40 pointer-events-none flex flex-col justify-between p-2">
+                    <div class="flex justify-between items-center text-[10px] font-mono text-white/90 bg-black/40 px-2 py-0.5 rounded">
+                        <span>ISO 400</span>
+                        <span id="mirror-badge">35MM FILM</span>
+                        <span>[ ● REC ]</span>
+                    </div>
+                    <div class="text-center bg-black/65 backdrop-blur-sm py-2 px-3 rounded-lg border border-gold/40">
+                        <p class="font-mono text-[10px] text-gold uppercase tracking-widest">Kepada Yth. Bapak/Ibu/Saudara/i:</p>
+                        <p id="guest-name-cover" class="font-serif text-lg md:text-xl text-cream font-semibold mt-0.5">Sahabat & Keluarga</p>
+                    </div>
+                </div>
+
+                <!-- Countdown Overlay -->
+                <div id="countdown-overlay" class="hidden absolute inset-0 bg-black/75 backdrop-blur-sm flex items-center justify-center z-20">
+                    <span id="countdown-number" class="font-mono text-6xl md:text-7xl font-bold text-cream animate-ping">3</span>
+                </div>
+            </div>
+
+            <!-- Controls & Coin Slot -->
+            <div class="grid grid-cols-3 gap-3 items-center">
+                <!-- Live Mirror Toggle -->
+                <button onclick="toggleCoverMirror()" id="btn-cover-mirror" class="col-span-1 bg-zinc-800 hover:bg-zinc-700 text-cream border border-zinc-600 rounded-xl py-3 px-2 flex flex-col items-center justify-center gap-1 transition text-xs font-mono cursor-pointer">
+                    <span class="text-base">🪞</span>
+                    <span>Cermin</span>
+                </button>
+
+                <!-- Main Start / Insert Coin Button -->
+                <button id="btn-start-booth" onclick="startPhotoboxExperience()" class="col-span-2 bg-gradient-to-r from-terracotta to-red-700 hover:from-red-700 hover:to-terracotta text-cream font-mono font-bold py-3.5 px-4 rounded-xl shadow-lg border border-gold/50 flex items-center justify-center gap-2 transition transform active:scale-95 cursor-pointer">
+                    <span>🪙</span>
+                    <span class="text-xs md:text-sm tracking-wider uppercase">Insert Coin & Cetak</span>
+                </button>
+            </div>
+
+            <!-- Mechanical Coin & Dispense Slot -->
+            <div class="mt-5 pt-4 border-t border-zinc-800 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="relative w-8 h-12 bg-zinc-950 border-2 border-zinc-600 rounded-md flex items-center justify-center">
+                        <div class="w-1.5 h-6 bg-black border border-zinc-700 rounded-full"></div>
+                        <div id="coin-anim" class="hidden absolute -top-4 w-5 h-5 rounded-full bg-gold border border-yellow-200 text-[9px] font-mono font-bold text-charcoal flex items-center justify-center shadow">1¢</div>
+                    </div>
+                    <div class="text-[11px] font-mono text-zinc-400 leading-tight">
+                        <p class="text-gold font-bold">FREE ADMISSION</p>
+                        <p>Tekan tombol untuk mulai</p>
+                    </div>
+                </div>
+                <div class="w-32 h-3 bg-zinc-950 border-2 border-zinc-700 rounded-full shadow-inner"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- SECTION 2: MAIN INVITATION & PHOTOSTRIP    -->
+    <!-- ========================================== -->
+    <main id="main-invitation" class="hidden min-h-screen w-full pb-24 pt-6 px-3 md:px-6 relative flex flex-col items-center">
+        
+        <!-- Sticky Top Studio Customization Bar -->
+        <div class="sticky top-3 z-30 bg-charcoal/95 backdrop-blur-md border border-gold/40 rounded-2xl p-2.5 shadow-2xl max-w-md w-full mb-5 text-cream">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+                <!-- Filter Selector -->
+                <div class="flex items-center gap-1">
+                    <span class="text-[10px] font-mono uppercase text-gold mr-1">Filter:</span>
+                    <button onclick="setMainFilter('filter-warm')" class="px-2 py-1 text-[11px] font-mono rounded bg-zinc-800 hover:bg-terracotta transition cursor-pointer">Warm</button>
+                    <button onclick="setMainFilter('filter-bw')" class="px-2 py-1 text-[11px] font-mono rounded bg-zinc-800 hover:bg-terracotta transition cursor-pointer">B&W</button>
+                    <button onclick="setMainFilter('filter-sepia')" class="px-2 py-1 text-[11px] font-mono rounded bg-zinc-800 hover:bg-terracotta transition cursor-pointer">Sepia</button>
+                    <button onclick="setMainFilter('filter-90s')" class="px-2 py-1 text-[11px] font-mono rounded bg-zinc-800 hover:bg-terracotta transition cursor-pointer">90s</button>
+                </div>
+
+                <!-- Paper Frame Theme -->
+                <div class="flex items-center gap-1.5">
+                    <span class="text-[10px] font-mono uppercase text-gold">Kertas:</span>
+                    <button onclick="setStripTheme('strip-ivory')" title="Ivory" class="w-5 h-5 rounded-full bg-[#FCFBF7] border border-zinc-400 cursor-pointer"></button>
+                    <button onclick="setStripTheme('strip-midnight')" title="Midnight" class="w-5 h-5 rounded-full bg-[#1A1918] border border-gold cursor-pointer"></button>
+                    <button onclick="setStripTheme('strip-pink')" title="Dusty Pink" class="w-5 h-5 rounded-full bg-[#F4E1E4] border border-zinc-400 cursor-pointer"></button>
+                    <button onclick="setStripTheme('strip-sage')" title="Matcha Sage" class="w-5 h-5 rounded-full bg-[#DCE3D8] border border-zinc-400 cursor-pointer"></button>
+                </div>
+            </div>
+
+            <!-- Quick Jump to Guest Selfie Booth -->
+            <div class="mt-2 pt-2 border-t border-zinc-800 flex items-center justify-between">
+                <span class="text-[11px] font-mono text-zinc-300">Ingin foto & cetak strip milikmu?</span>
+                <a href="#guest-photobox-studio" class="bg-gold hover:bg-yellow-500 text-charcoal font-mono font-bold text-[11px] px-3 py-1 rounded-full transition flex items-center gap-1 shadow">
+                    <span>📸</span> Buka Photobox Tamu
+                </a>
+            </div>
+        </div>
+
+        <!-- Printer Dispenser Slot Graphic -->
+        <div class="w-full max-w-[460px] h-5 bg-zinc-950 border-4 border-zinc-700 rounded-full shadow-[0_10px_25px_rgba(0,0,0,0.9)] z-20 -mb-2.5"></div>
+
+        <!-- THE PHOTOSTRIP PAPER CONTAINER -->
+        <div id="photostrip-paper" class="w-full max-w-[440px] strip-ivory border-x-4 border-b-4 shadow-[0_30px_90px_rgba(0,0,0,0.75)] p-4 md:p-6 relative overflow-hidden">
+            
+            <!-- Side Film Serial Numbers -->
+            <div class="flex justify-between items-center text-[10px] font-mono opacity-60 mb-3 border-b border-current pb-1.5">
+                <span>KODAK PORTRA 400</span>
+                <span>▶ EXP 24-10-2026</span>
+                <span>#RS-01</span>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- FRAME 01: THE COUPLE                       -->
+            <!-- ========================================== -->
+            <div class="mb-8">
+                <div class="relative w-full aspect-[4/5] bg-zinc-900 p-2 shadow-md border border-black/15 overflow-hidden group">
+                    <img id="couple-pose-img" src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=900&q=80" alt="Couple Pose" onerror="this.src='https://placehold.co/800x1000/27272a/F6F1E7?text=Rama+%26+Sinta'" class="main-photo w-full h-full object-cover filter-warm transition duration-500">
+                    
+                    <!-- Quartz Timestamp -->
+                    <div class="absolute bottom-4 right-5 quartz-stamp text-sm font-bold pointer-events-none">
+                        '26 10 24
+                    </div>
+
+                    <!-- Switch Pose Button -->
+                    <button onclick="switchCouplePose()" class="absolute bottom-4 left-4 bg-charcoal/85 hover:bg-terracotta text-cream font-mono text-xs px-3 py-1.5 rounded-full border border-gold/40 shadow-lg flex items-center gap-1.5 transition cursor-pointer">
+                        <span>🔄</span> Ganti Pose (<span id="pose-index">1</span>/4)
+                    </button>
+                </div>
+
+                <div class="text-center mt-4 px-2">
+                    <p class="font-mono text-xs uppercase tracking-[0.2em] text-terracotta font-bold">The Wedding Of</p>
+                    <h2 class="font-serif text-4xl font-bold mt-1">Rama & Sinta</h2>
+                    <p class="text-xs italic opacity-80 mt-3 leading-relaxed">
+                        "Dan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya." <br>
+                        <span class="font-mono not-italic font-bold text-[11px] mt-1 inline-block">— QS. Ar-Rum: 21</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- FRAME 02: BRIDE & GROOM POLAROIDS          -->
+            <!-- ========================================== -->
+            <div class="mb-8 pt-6 border-t border-dashed border-current/30">
+                <div class="flex justify-between items-center text-[10px] font-mono opacity-60 mb-4">
+                    <span>FRAME 02 // THE BRIDE & GROOM</span>
+                    <span>▲ 35MM</span>
+                </div>
+
+                <!-- Groom Polaroid -->
+                <div class="bg-white text-charcoal p-3 pb-5 shadow-lg border border-zinc-200 rotate-[-1.5deg] mb-6 relative">
+                    <div class="washi-tape w-24 h-6 absolute -top-3 left-1/2 -translate-x-1/2 rotate-2"></div>
+                    <div class="aspect-[4/3] overflow-hidden bg-zinc-100 mb-3">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=700&q=80" alt="Rama" onerror="this.src='https://placehold.co/600x450/e4e4e7/1F1D1A?text=Rama+Wijaya'" class="main-photo w-full h-full object-cover filter-warm">
+                    </div>
+                    <h3 class="font-serif text-xl font-bold">Rama Wijaya, S.T.</h3>
+                    <p class="text-xs text-zinc-600 mt-1">Putra Pertama dari Bpk. Hendra Wijaya & Ibu Ratna Sari</p>
+                    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="inline-block mt-2 font-mono text-[11px] text-terracotta hover:underline">@ramawijaya</a>
+                </div>
+
+                <!-- Bride Polaroid -->
+                <div class="bg-white text-charcoal p-3 pb-5 shadow-lg border border-zinc-200 rotate-[1.5deg] relative">
+                    <div class="washi-tape w-24 h-6 absolute -top-3 left-1/2 -translate-x-1/2 -rotate-2"></div>
+                    <div class="aspect-[4/3] overflow-hidden bg-zinc-100 mb-3">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=700&q=80" alt="Sinta" onerror="this.src='https://placehold.co/600x450/e4e4e7/1F1D1A?text=Sinta+Maharani'" class="main-photo w-full h-full object-cover filter-warm">
+                    </div>
+                    <h3 class="font-serif text-xl font-bold">Sinta Maharani, S.Ars.</h3>
+                    <p class="text-xs text-zinc-600 mt-1">Putri Kedua dari Bpk. Surya Pratama & Ibu Dewi Lestari</p>
+                    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="inline-block mt-2 font-mono text-[11px] text-terracotta hover:underline">@sintamaharani</a>
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- FRAME 03: LOVE STORY 35MM FILM REEL        -->
+            <!-- ========================================== -->
+            <div class="mb-8 pt-6 border-t border-dashed border-current/30">
+                <div class="flex justify-between items-center text-[10px] font-mono opacity-60 mb-3">
+                    <span>FRAME 03 // LOVE STORY REEL</span>
+                    <span>GESER ➔</span>
+                </div>
+
+                <div class="bg-zinc-950 text-cream p-3 rounded-xl border border-zinc-800 overflow-x-auto">
+                    <!-- Top Film Sprockets -->
+                    <div class="flex gap-3 mb-2 opacity-60">
+                        <div class="w-4 h-2.5 bg-zinc-700 rounded-sm shrink-0"></div>
+                        <div class="w-4 h-2.5 bg-zinc-700 rounded-sm shrink-0"></div>
+                        <div class="w-4 h-2.5 bg-zinc-700 rounded-sm shrink-0"></div>
+                        <div class="w-4 h-2.5 bg-zinc-700 rounded-sm shrink-0"></div>
+                        <div class="w-4 h-2.5 bg-zinc-700 rounded-sm shrink-0"></div>
+                        <div class="w-4 h-2.5 bg-zinc-700 rounded-sm shrink-0"></div>
+                        <div class="w-4 h-2.5 bg-zinc-700 rounded-sm shrink-0"></div>
+                        <div class="w-4 h-2.5 bg-zinc-700 rounded-sm shrink-0"></div>
+                    </div>
+
+                    <div class="flex gap-4 min-w-max pb-1">
+                        <div class="w-56 bg-zinc-900 p-2.5 rounded border border-zinc-700">
+                            <span class="font-mono text-[10px] text-gold">2022 • FIRST MET</span>
+                            <h4 class="font-serif font-bold text-sm mt-0.5">Pameran Fotografi Analog</h4>
+                            <p class="text-xs text-zinc-400 mt-1">Pertemuan pertama di galeri seni Kemang saat sama-sama mengagumi kamera tua.</p>
+                        </div>
+                        <div class="w-56 bg-zinc-900 p-2.5 rounded border border-zinc-700">
+                            <span class="font-mono text-[10px] text-gold">2024 • FIRST TRIP</span>
+                            <h4 class="font-serif font-bold text-sm mt-0.5">Senja di Yogyakarta</h4>
+                            <p class="text-xs text-zinc-400 mt-1">Mengabadikan ratusan lembar photostrip dan memutuskan melangkah bersama.</p>
+                        </div>
+                        <div class="w-56 bg-zinc-900 p-2.5 rounded border border-zinc-700">
+                            <span class="font-mono text-[10px] text-gold">2026 • THE PROPOSAL</span>
+                            <h4 class="font-serif font-bold text-sm mt-0.5">Menuju Ikatan Suci</h4>
+                            <p class="text-xs text-zinc-400 mt-1">Di dalam bilik photobox favorit, cincin disematkan pada cetakan foto terakhir.</p>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Film Sprockets -->
+                    <div class="flex gap-3 mt-2 opacity-60">
+                        <div class="w-4 h-2.5 bg-zinc-700 rounded-sm shrink-0"></div>
+                        <div class="w-4 h-2.5 bg-zinc-700 rounded-sm shrink-0"></div>
+                        <div class="w-4 h-2.5 bg-zinc-700 rounded-sm shrink-0"></div>
+                        <div class="w-4 h-2.5 bg-zinc-700 rounded-sm shrink-0"></div>
+                        <div class="w-4 h-2.5 bg-zinc-700 rounded-sm shrink-0"></div>
+                        <div class="w-4 h-2.5 bg-zinc-700 rounded-sm shrink-0"></div>
+                        <div class="w-4 h-2.5 bg-zinc-700 rounded-sm shrink-0"></div>
+                        <div class="w-4 h-2.5 bg-zinc-700 rounded-sm shrink-0"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- FRAME 04: VENUE & FLIP-CLOCK COUNTDOWN     -->
+            <!-- ========================================== -->
+            <div class="mb-8 pt-6 border-t border-dashed border-current/30">
+                <div class="flex justify-between items-center text-[10px] font-mono opacity-60 mb-4">
+                    <span>FRAME 04 // DATE & VENUE</span>
+                    <span>▲ 24.10.2026</span>
+                </div>
+
+                <!-- Flip Clock Countdown -->
+                <div class="grid grid-cols-4 gap-2 text-center mb-5">
+                    <div class="bg-charcoal text-cream p-2.5 rounded-xl border border-gold/40 shadow">
+                        <span id="cd-days" class="font-mono text-2xl font-bold text-gold block">00</span>
+                        <span class="font-mono text-[10px] uppercase tracking-wider">Hari</span>
+                    </div>
+                    <div class="bg-charcoal text-cream p-2.5 rounded-xl border border-gold/40 shadow">
+                        <span id="cd-hours" class="font-mono text-2xl font-bold text-gold block">00</span>
+                        <span class="font-mono text-[10px] uppercase tracking-wider">Jam</span>
+                    </div>
+                    <div class="bg-charcoal text-cream p-2.5 rounded-xl border border-gold/40 shadow">
+                        <span id="cd-mins" class="font-mono text-2xl font-bold text-gold block">00</span>
+                        <span class="font-mono text-[10px] uppercase tracking-wider">Menit</span>
+                    </div>
+                    <div class="bg-charcoal text-cream p-2.5 rounded-xl border border-gold/40 shadow">
+                        <span id="cd-secs" class="font-mono text-2xl font-bold text-gold block">00</span>
+                        <span class="font-mono text-[10px] uppercase tracking-wider">Detik</span>
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <div class="p-3.5 rounded-xl border border-current/20 bg-black/5">
+                        <p class="font-mono text-xs font-bold text-terracotta uppercase">💍 Akad Nikah</p>
+                        <p class="font-serif text-lg font-bold mt-0.5">Sabtu, 24 Oktober 2026</p>
+                        <p class="font-mono text-xs opacity-80">Pukul 08.00 – 10.00 WIB</p>
+                    </div>
+                    <div class="p-3.5 rounded-xl border border-current/20 bg-black/5">
+                        <p class="font-mono text-xs font-bold text-terracotta uppercase">🥂 Resepsi Pernikahan</p>
+                        <p class="font-serif text-lg font-bold mt-0.5">Sabtu, 24 Oktober 2026</p>
+                        <p class="font-mono text-xs opacity-80">Pukul 11.00 – 14.00 WIB</p>
+                    </div>
+                </div>
+
+                <div class="mt-4 text-center p-4 rounded-xl bg-charcoal text-cream border border-gold/40">
+                    <p class="font-mono text-[11px] text-gold uppercase tracking-widest">Lokasi Acara</p>
+                    <h4 class="font-serif text-lg font-bold mt-1">Glass House — The Dharmawangsa</h4>
+                    <p id="venue-address" class="text-xs text-zinc-300 mt-1">Jl. Brawijaya Raya No. 26, Kebayoran Baru, Jakarta Selatan</p>
+                    <div class="flex flex-wrap justify-center gap-2 mt-3">
+                        <a href="https://maps.google.com/?q=The+Dharmawangsa+Jakarta" target="_blank" rel="noopener noreferrer" class="bg-terracotta hover:bg-red-700 text-cream font-mono text-xs px-3.5 py-2 rounded-lg transition">📍 Buka Google Maps</a>
+                        <button onclick="copyText('Jl. Brawijaya Raya No. 26, Kebayoran Baru, Jakarta Selatan', 'Alamat berhasil disalin!')" class="bg-zinc-800 hover:bg-zinc-700 text-cream font-mono text-xs px-3.5 py-2 rounded-lg border border-zinc-600 transition cursor-pointer">📋 Salin Alamat</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================================== -->
+            <!-- FRAME 05: INTERACTIVE GUEST PHOTOBOX STUDIO (SELFIE & EDIT)-->
+            <!-- ========================================================== -->
+            <div id="guest-photobox-studio" class="pt-6 border-t-2 border-dashed border-current/40 scroll-mt-20">
+                <div class="flex justify-between items-center text-[10px] font-mono opacity-75 mb-2">
+                    <span class="font-bold text-terracotta">FRAME 05 // GUEST SELFIE PHOTOBOX</span>
+                    <span>★ CETAK SOUVENIRMU</span>
+                </div>
+
+                <div class="bg-zinc-900 text-cream rounded-2xl p-4 border-2 border-gold/60 shadow-2xl">
+                    <div class="text-center mb-3">
+                        <span class="inline-block bg-terracotta text-cream font-mono text-[10px] uppercase px-2.5 py-0.5 rounded-full font-bold tracking-wider">Fitur Spesial Tamu</span>
+                        <h3 class="font-serif text-xl font-bold mt-1 text-gold">Selfie & Edit Photostrip Kamu!</h3>
+                        <p class="text-xs text-zinc-300 mt-0.5">Gunakan kamera HP-mu untuk ambil 3 pose foto, tambahkan filter & stiker lucu, lalu unduh hasilnya lengkap dengan nama pengantin, tanggal & lokasi acara.</p>
+                    </div>
+
+                    <!-- STEP 1: CAMERA / UPLOAD CAPTURE -->
+                    <div class="bg-zinc-950 rounded-xl p-3 border border-zinc-800 mb-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-mono text-[11px] text-gold font-bold">1. AMBIL 3 POSE FOTO HP</span>
+                            <span id="camera-slot-indicator" class="font-mono text-[10px] bg-zinc-800 px-2 py-0.5 rounded text-emerald-400">Slot Aktif: Pose #1</span>
+                        </div>
+
+                        <!-- Live Camera Viewport -->
+                        <div class="relative w-full aspect-[4/3] bg-black rounded-lg overflow-hidden border border-zinc-700 mb-3 flex items-center justify-center">
+                            <video id="guest-camera-video" autoplay playsinline muted class="hidden w-full h-full object-cover scale-x-[-1]"></video>
+                            
+                            <!-- Placeholder when camera is off -->
+                            <div id="camera-off-placeholder" class="text-center p-4">
+                                <p class="text-3xl mb-2">📱📸</p>
+                                <p class="font-mono text-xs text-zinc-300">Nyalakan kamera HP-mu atau unggah foto dari galeri untuk mengisi 3 frame photostrip.</p>
+                                <button onclick="startGuestCamera()" class="mt-3 bg-terracotta hover:bg-red-700 text-white font-mono text-xs font-bold px-4 py-2 rounded-lg shadow transition cursor-pointer">
+                                    🎥 Aktifkan Kamera HP
+                                </button>
+                            </div>
+
+                            <!-- Countdown Overlay inside Guest Booth -->
+                            <div id="guest-booth-countdown" class="hidden absolute inset-0 bg-black/70 flex flex-col items-center justify-center z-20">
+                                <p id="guest-booth-pose-label" class="font-mono text-xs text-gold uppercase tracking-widest mb-1">SIAP POSE #1</p>
+                                <span id="guest-booth-cd-num" class="font-mono text-6xl font-bold text-white">3</span>
+                            </div>
+                        </div>
+
+                        <!-- Camera Action Buttons -->
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                            <button onclick="startAuto3PoseBooth()" class="col-span-2 bg-gradient-to-r from-terracotta to-red-700 hover:from-red-700 hover:to-terracotta text-white font-mono text-xs font-bold py-2.5 px-3 rounded-lg shadow flex items-center justify-center gap-1.5 transition cursor-pointer">
+                                <span>⚡</span> Auto 3-Pose (3..2..1)
+                            </button>
+                            <button onclick="captureSinglePose()" class="bg-zinc-800 hover:bg-zinc-700 text-cream font-mono text-xs py-2 px-2 rounded-lg border border-zinc-700 flex items-center justify-center gap-1 transition cursor-pointer">
+                                <span>📸</span> Jepret Slot
+                            </button>
+                            <button onclick="switchCameraFacing()" class="bg-zinc-800 hover:bg-zinc-700 text-cream font-mono text-xs py-2 px-2 rounded-lg border border-zinc-700 flex items-center justify-center gap-1 transition cursor-pointer">
+                                <span>🔄</span> Balik Kamera
+                            </button>
+                        </div>
+
+                        <!-- Slot Selection & Upload from Phone Gallery -->
+                        <div class="mt-3 pt-2.5 border-t border-zinc-800 flex flex-wrap items-center justify-between gap-2">
+                            <div class="flex items-center gap-1.5">
+                                <span class="font-mono text-[10px] text-zinc-400">Pilih Slot:</span>
+                                <button onclick="selectPoseSlot(0)" id="slot-btn-0" class="px-2.5 py-1 rounded text-[11px] font-mono bg-gold text-charcoal font-bold cursor-pointer">Pose 1</button>
+                                <button onclick="selectPoseSlot(1)" id="slot-btn-1" class="px-2.5 py-1 rounded text-[11px] font-mono bg-zinc-800 text-zinc-300 cursor-pointer">Pose 2</button>
+                                <button onclick="selectPoseSlot(2)" id="slot-btn-2" class="px-2.5 py-1 rounded text-[11px] font-mono bg-zinc-800 text-zinc-300 cursor-pointer">Pose 3</button>
+                            </div>
+
+                            <label class="cursor-pointer bg-zinc-800 hover:bg-zinc-700 text-gold border border-gold/40 font-mono text-[11px] px-3 py-1 rounded-lg flex items-center gap-1 transition">
+                                <span>🖼️</span> Pilih Galeri HP
+                                <input type="file" id="gallery-upload-input" accept="image/*" class="hidden" onchange="handleGalleryUpload(event)">
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- STEP 2: EDIT FILTER, FRAME & STICKERS -->
+                    <div class="bg-zinc-950 rounded-xl p-3 border border-zinc-800 mb-4 space-y-3">
+                        <span class="font-mono text-[11px] text-gold font-bold block">2. EDIT FILTER, BINGKAI & TEMPEL STIKER</span>
+
+                        <!-- Filter Buttons for Guest Strip -->
+                        <div>
+                            <p class="font-mono text-[10px] text-zinc-400 mb-1.5">Filter Foto Tamu:</p>
+                            <div class="flex flex-wrap gap-1.5">
+                                <button onclick="setGuestStripFilter('none')" id="gfilter-none" class="px-2.5 py-1 rounded text-[11px] font-mono bg-terracotta text-white cursor-pointer">Normal</button>
+                                <button onclick="setGuestStripFilter('warm')" id="gfilter-warm" class="px-2.5 py-1 rounded text-[11px] font-mono bg-zinc-800 text-zinc-300 hover:bg-zinc-700 cursor-pointer">Warm Vintage</button>
+                                <button onclick="setGuestStripFilter('bw')" id="gfilter-bw" class="px-2.5 py-1 rounded text-[11px] font-mono bg-zinc-800 text-zinc-300 hover:bg-zinc-700 cursor-pointer">Classic B&W</button>
+                                <button onclick="setGuestStripFilter('sepia')" id="gfilter-sepia" class="px-2.5 py-1 rounded text-[11px] font-mono bg-zinc-800 text-zinc-300 hover:bg-zinc-700 cursor-pointer">Sepia 90s</button>
+                                <button onclick="setGuestStripFilter('rose')" id="gfilter-rose" class="px-2.5 py-1 rounded text-[11px] font-mono bg-zinc-800 text-zinc-300 hover:bg-zinc-700 cursor-pointer">Soft Rose</button>
+                            </div>
+                        </div>
+
+                        <!-- Strip Background Color -->
+                        <div class="flex items-center justify-between pt-2 border-t border-zinc-900">
+                            <span class="font-mono text-[10px] text-zinc-400">Warna Kertas Strip:</span>
+                            <div class="flex items-center gap-2">
+                                <button onclick="setGuestStripBg('#FCFBF7', '#1F1D1A', '#B84A39')" title="Classic Ivory" class="w-6 h-6 rounded-full bg-[#FCFBF7] border-2 border-gold shadow cursor-pointer"></button>
+                                <button onclick="setGuestStripBg('#18181B', '#F6F1E7', '#C99E5A')" title="Midnight Black" class="w-6 h-6 rounded-full bg-[#18181B] border-2 border-zinc-500 shadow cursor-pointer"></button>
+                                <button onclick="setGuestStripBg('#F5E1E5', '#2D1E20', '#9E3B4B')" title="Dusty Rose" class="w-6 h-6 rounded-full bg-[#F5E1E5] border-2 border-zinc-400 shadow cursor-pointer"></button>
+                                <button onclick="setGuestStripBg('#DDE5D9', '#1E281D', '#4A6B4E')" title="Matcha Sage" class="w-6 h-6 rounded-full bg-[#DDE5D9] border-2 border-zinc-400 shadow cursor-pointer"></button>
+                                <button onclick="setGuestStripBg('#7F2B21', '#FCFBF7', '#E6C280')" title="Retro Terracotta" class="w-6 h-6 rounded-full bg-[#7F2B21] border-2 border-zinc-400 shadow cursor-pointer"></button>
+                            </div>
+                        </div>
+
+                        <!-- Stickers Palette -->
+                        <div class="pt-2 border-t border-zinc-900">
+                            <div class="flex items-center justify-between mb-1.5">
+                                <span class="font-mono text-[10px] text-zinc-400">Tambah Stiker (Sentuh & Geser di Strip):</span>
+                                <div class="flex gap-1">
+                                    <button onclick="resizeSelectedSticker(1.15)" class="bg-zinc-800 hover:bg-zinc-700 text-[10px] font-mono px-2 py-0.5 rounded border border-zinc-700 cursor-pointer" title="Perbesar Stiker">➕ Besar</button>
+                                    <button onclick="resizeSelectedSticker(0.85)" class="bg-zinc-800 hover:bg-zinc-700 text-[10px] font-mono px-2 py-0.5 rounded border border-zinc-700 cursor-pointer" title="Perkecil Stiker">➖ Kecil</button>
+                                    <button onclick="deleteSelectedSticker()" class="bg-red-950/80 hover:bg-red-800 text-red-200 text-[10px] font-mono px-2 py-0.5 rounded border border-red-800 cursor-pointer">🗑️ Hapus</button>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5">
+                                <button onclick="addGuestSticker('❤️')" class="bg-zinc-800 hover:bg-zinc-700 px-2.5 py-1.5 rounded-lg text-base cursor-pointer">❤️</button>
+                                <button onclick="addGuestSticker('✨')" class="bg-zinc-800 hover:bg-zinc-700 px-2.5 py-1.5 rounded-lg text-base cursor-pointer">✨</button>
+                                <button onclick="addGuestSticker('🌸')" class="bg-zinc-800 hover:bg-zinc-700 px-2.5 py-1.5 rounded-lg text-base cursor-pointer">🌸</button>
+                                <button onclick="addGuestSticker('🎀')" class="bg-zinc-800 hover:bg-zinc-700 px-2.5 py-1.5 rounded-lg text-base cursor-pointer">🎀</button>
+                                <button onclick="addGuestSticker('🕶️')" class="bg-zinc-800 hover:bg-zinc-700 px-2.5 py-1.5 rounded-lg text-base cursor-pointer">🕶️</button>
+                                <button onclick="addGuestSticker('👑')" class="bg-zinc-800 hover:bg-zinc-700 px-2.5 py-1.5 rounded-lg text-base cursor-pointer">👑</button>
+                                <button onclick="addGuestSticker('🥂')" class="bg-zinc-800 hover:bg-zinc-700 px-2.5 py-1.5 rounded-lg text-base cursor-pointer">🥂</button>
+                                <button onclick="addGuestSticker('💍')" class="bg-zinc-800 hover:bg-zinc-700 px-2.5 py-1.5 rounded-lg text-base cursor-pointer">💍</button>
+                                <button onclick="addGuestSticker('Just Married')" class="bg-zinc-800 hover:bg-zinc-700 px-2.5 py-1 rounded-lg font-hand text-xs text-gold border border-gold/30 cursor-pointer">Just Married</button>
+                                <button onclick="addGuestSticker('Team Pengantin')" class="bg-zinc-800 hover:bg-zinc-700 px-2.5 py-1 rounded-lg font-mono text-[10px] text-cream border border-zinc-600 cursor-pointer">Team Pengantin</button>
+                            </div>
+                        </div>
+
+                        <!-- Custom Guest Caption Input -->
+                        <div class="pt-2 border-t border-zinc-900">
+                            <label class="font-mono text-[10px] text-zinc-400 block mb-1">Teks Catatan / Nama Tamu di Strip:</label>
+                            <input type="text" id="guest-strip-caption" oninput="renderGuestPhotostripCanvas()" placeholder="Contoh: Kondangan Bareng Bestie!" class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-1.5 text-xs text-cream font-mono focus:outline-none focus:border-gold">
+                        </div>
+                    </div>
+
+                    <!-- STEP 3: LIVE INTERACTIVE CANVAS PREVIEW & DOWNLOAD -->
+                    <div class="bg-zinc-950 rounded-xl p-3 border border-zinc-800 text-center">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-mono text-[11px] text-gold font-bold">3. PRATINJAU & UNDUH STRIP FOTOBOX</span>
+                            <span class="font-mono text-[10px] text-zinc-400">Geser stiker langsung di gambar</span>
+                        </div>
+
+                        <!-- Interactive Canvas Wrapper -->
+                        <div class="flex justify-center my-2">
+                            <canvas id="guest-strip-canvas" width="600" height="1620" class="w-full max-w-[280px] rounded-lg shadow-[0_10px_30px_rgba(0,0,0,0.85)] border border-zinc-700 cursor-grab active:cursor-grabbing touch-none"></canvas>
+                        </div>
+
+                        <p class="font-mono text-[10px] text-zinc-400 mt-2 mb-3">
+                            Di bagian bawah strip sudah tercantum: <strong class="text-cream">Rama & Sinta • 24 Oktober 2026 • Glass House, The Dharmawangsa Jakarta</strong>
+                        </p>
+
+                        <!-- Download & Use for RSVP Buttons -->
+                        <div class="flex flex-col sm:flex-row gap-2 justify-center">
+                            <button onclick="downloadGuestPhotostrip()" class="flex-1 bg-gradient-to-r from-gold to-yellow-600 hover:from-yellow-500 hover:to-gold text-charcoal font-mono font-bold text-xs py-3 px-4 rounded-xl shadow-lg flex items-center justify-center gap-2 transition transform active:scale-95 cursor-pointer">
+                                <span>⬇️</span> Unduh Strip Fotobox (.PNG)
+                            </button>
+                            <a href="#rsvp-section" onclick="attachStripToRSVP()" class="bg-zinc-800 hover:bg-zinc-700 text-cream border border-gold/40 font-mono text-xs py-3 px-3 rounded-xl flex items-center justify-center gap-1.5 transition">
+                                <span>📌</span> Tempel ke Buku Tamu
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Strip Perforation & Barcode -->
+            <div class="mt-8 pt-4 border-t-2 border-current/30 flex items-center justify-between opacity-75">
+                <div>
+                    <p class="font-serif font-bold text-sm">Rama & Sinta</p>
+                    <p class="font-mono text-[10px]">24.10.2026 • JAKARTA</p>
+                </div>
+                <!-- Simulated Barcode -->
+                <div class="flex items-center h-7 gap-[2px]">
+                    <div class="w-1 h-full bg-current"></div>
+                    <div class="w-0.5 h-full bg-current"></div>
+                    <div class="w-1.5 h-full bg-current"></div>
+                    <div class="w-0.5 h-full bg-current"></div>
+                    <div class="w-1 h-full bg-current"></div>
+                    <div class="w-2 h-full bg-current"></div>
+                    <div class="w-0.5 h-full bg-current"></div>
+                    <div class="w-1 h-full bg-current"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SECTION 3: DIGITAL WEDDING GIFT (AMPLOP)   -->
+        <!-- ========================================== -->
+        <section class="w-full max-w-[440px] mt-10 bg-zinc-900 border-2 border-gold/50 rounded-2xl p-5 text-cream shadow-xl">
+            <div class="text-center mb-4">
+                <p class="font-mono text-[10px] text-gold uppercase tracking-widest">Wedding Gift</p>
+                <h3 class="font-serif text-2xl font-bold mt-0.5">Amplop Digital</h3>
+                <p class="text-xs text-zinc-400 mt-1">Doa restu Anda merupakan karunia terindah bagi kami. Namun jika ingin mengirimkan tanda kasih, dapat melalui:</p>
+            </div>
+
+            <div class="space-y-3">
+                <div class="bg-zinc-950 p-3.5 rounded-xl border border-zinc-800 flex items-center justify-between">
+                    <div>
+                        <span class="font-mono text-[10px] bg-blue-900/60 text-blue-200 px-2 py-0.5 rounded font-bold">BANK BCA</span>
+                        <p class="font-mono text-base font-bold text-gold mt-1">8720 1928 34</p>
+                        <p class="text-xs text-zinc-400">a.n. Rama Wijaya</p>
+                    </div>
+                    <button onclick="copyText('8720192834', 'Nomor rekening BCA disalin!')" class="bg-zinc-800 hover:bg-terracotta text-cream font-mono text-xs px-3 py-2 rounded-lg border border-zinc-700 transition cursor-pointer">Salin</button>
+                </div>
+
+                <div class="bg-zinc-950 p-3.5 rounded-xl border border-zinc-800 flex items-center justify-between">
+                    <div>
+                        <span class="font-mono text-[10px] bg-yellow-900/60 text-yellow-200 px-2 py-0.5 rounded font-bold">BANK MANDIRI</span>
+                        <p class="font-mono text-base font-bold text-gold mt-1">1240 0098 2311 2</p>
+                        <p class="text-xs text-zinc-400">a.n. Sinta Maharani</p>
+                    </div>
+                    <button onclick="copyText('1240009823112', 'Nomor rekening Mandiri disalin!')" class="bg-zinc-800 hover:bg-terracotta text-cream font-mono text-xs px-3 py-2 rounded-lg border border-zinc-700 transition cursor-pointer">Salin</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SECTION 4: CORKBOARD POLAROID GUESTBOOK    -->
+        <!-- ========================================== -->
+        <section id="rsvp-section" class="w-full max-w-2xl mt-10 scroll-mt-20">
+            <div class="bg-zinc-900 border-2 border-gold/50 rounded-2xl p-5 text-cream shadow-xl mb-6">
+                <div class="text-center mb-4">
+                    <p class="font-mono text-[10px] text-gold uppercase tracking-widest">Polaroid Guestbook</p>
+                    <h3 class="font-serif text-2xl font-bold mt-0.5">Konfirmasi Kehadiran & Doa</h3>
+                </div>
+
+                <form id="rsvp-form" onsubmit="submitPolaroidRSVP(event)" class="space-y-3">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="font-mono text-xs text-zinc-300 block mb-1">Nama Lengkap</label>
+                            <input type="text" id="rsvp-name" required placeholder="Nama Anda" class="w-full bg-zinc-950 border border-zinc-700 rounded-xl px-3 py-2 text-sm text-cream focus:outline-none focus:border-gold">
+                        </div>
+                        <div>
+                            <label class="font-mono text-xs text-zinc-300 block mb-1">Kehadiran</label>
+                            <select id="rsvp-attendance" class="w-full bg-zinc-950 border border-zinc-700 rounded-xl px-3 py-2 text-sm text-cream focus:outline-none focus:border-gold">
+                                <option value="Hadir">✅ Ya, Saya Akan Hadir</option>
+                                <option value="Berhalangan">🙏 Maaf, Belum Bisa Hadir</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="font-mono text-xs text-zinc-300 block mb-1">Ucapan & Doa untuk Pengantin</label>
+                        <textarea id="rsvp-message" required rows="3" placeholder="Tuliskan doa dan harapan terbaik..." class="w-full bg-zinc-950 border border-zinc-700 rounded-xl px-3 py-2 text-sm text-cream focus:outline-none focus:border-gold"></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full bg-terracotta hover:bg-red-700 text-cream font-mono font-bold text-xs uppercase tracking-wider py-3 rounded-xl shadow-lg border border-gold/40 transition cursor-pointer">
+                        📌 Tempel Polaroid Ucapan ke Papan Gabus
+                    </button>
+                </form>
+            </div>
+
+            <!-- Corkboard Wall -->
+            <div class="corkboard rounded-2xl p-5 border-8 border-[#5c3d21] shadow-2xl">
+                <h4 class="text-center font-mono text-xs uppercase tracking-widest text-cream bg-charcoal/80 py-1.5 px-4 rounded-full w-max mx-auto mb-5 border border-gold/40">
+                    📌 Papan Polaroid Tamu (<span id="rsvp-count">2</span>)
+                </h4>
+
+                <div id="polaroid-wall" class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <!-- Default Polaroid 1 -->
+                    <div class="bg-ivory text-charcoal p-3 pb-4 rounded shadow-xl rotate-[-1.5deg] relative">
+                        <div class="washi-tape w-20 h-5 absolute -top-2.5 left-1/2 -translate-x-1/2"></div>
+                        <div class="flex items-center justify-between border-b border-zinc-300 pb-1.5 mb-2">
+                            <span class="font-serif font-bold text-sm">Dimas & Rina</span>
+                            <span class="font-mono text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-bold">Hadir</span>
+                        </div>
+                        <p class="font-hand text-lg leading-snug text-zinc-800">"Selamat menempuh hidup baru Rama & Sinta! Semoga sakinah mawaddah warahmah selamanya."</p>
+                        <p class="font-mono text-[9px] text-zinc-400 mt-2 text-right">Baru saja</p>
+                    </div>
+
+                    <!-- Default Polaroid 2 -->
+                    <div class="bg-[#F4E1E4] text-charcoal p-3 pb-4 rounded shadow-xl rotate-[1.5deg] relative">
+                        <div class="washi-tape w-20 h-5 absolute -top-2.5 left-1/2 -translate-x-1/2"></div>
+                        <div class="flex items-center justify-between border-b border-zinc-300 pb-1.5 mb-2">
+                            <span class="font-serif font-bold text-sm">Keluarga Bpk. Arifin</span>
+                            <span class="font-mono text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-bold">Hadir</span>
+                        </div>
+                        <p class="font-hand text-lg leading-snug text-zinc-800">"Turut berbahagia atas pernikahan putra-putri tercinta. Sampai jumpa di acara resepsi!"</p>
+                        <p class="font-mono text-[9px] text-zinc-400 mt-2 text-right">10 menit lalu</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 hidden bg-charcoal text-cream border border-gold px-4 py-2.5 rounded-xl shadow-2xl font-mono text-xs"></div>
+
+    <!-- ========================================== -->
+    <!-- JAVASCRIPT LOGIC                           -->
+    <!-- ========================================== -->
+    <script>
+        /* ==========================================
+           1. STATE & PERSONALIZATION
+        ========================================== */
+        let sfxEnabled = true;
+        let isMusicPlaying = false;
+        let musicInterval = null;
+        let audioCtx = null;
+
+        // Parse Guest Name from ?to=Nama+Tamu
+        const urlParams = new URLSearchParams(window.location.search);
+        const guestNameParam = urlParams.get('to') || 'Sahabat & Keluarga';
+        document.getElementById('guest-name-cover').textContent = guestNameParam;
+        document.getElementById('rsvp-name').value = guestNameParam !== 'Sahabat & Keluarga' ? guestNameParam : '';
+        document.getElementById('guest-strip-caption').value = guestNameParam;
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 3000);
+        }
+
+        function copyText(text, message) {
+            const tempInput = document.createElement('textarea');
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            playBeep(1040, 0.08);
+            showToast(message);
+        }
+
+        /* ==========================================
+           2. WEB AUDIO API (PURE SYNTHESIZED SFX)
+        ========================================== */
+        function initAudio() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContext();
+            }
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+        }
+
+        function playBeep(freq = 880, duration = 0.12) {
+            if (!sfxEnabled) return;
+            try {
+                initAudio();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch (e) {}
+        }
+
+        function playCoinSFX() {
+            if (!sfxEnabled) return;
+            playBeep(987.77, 0.09);
+            setTimeout(() => playBeep(1318.51, 0.25), 90);
+        }
+
+        function playShutterSFX() {
+            if (!sfxEnabled) return;
+            try {
+                initAudio();
+                const bufferSize = audioCtx.sampleRate * 0.15;
+                const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                const data = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (audioCtx.sampleRate * 0.03));
+                }
+                const noise = audioCtx.createBufferSource();
+                noise.buffer = buffer;
+                const gain = audioCtx.createGain();
+                gain.gain.setValueAtTime(0.35, audioCtx.currentTime);
+                noise.connect(gain);
+                gain.connect(audioCtx.destination);
+                noise.start();
+            } catch (e) {}
+        }
+
+        function playPrinterWhirSFX() {
+            if (!sfxEnabled) return;
+            try {
+                initAudio();
+                const now = audioCtx.currentTime;
+                for (let i = 0; i < 5; i++) {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(115 + (i % 2) * 20, now + i * 0.35);
+                    gain.gain.setValueAtTime(0.03, now + i * 0.35);
+                    gain.gain.exponentialRampToValueAtTime(0.002, now + i * 0.35 + 0.28);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(now + i * 0.35);
+                    osc.stop(now + i * 0.35 + 0.3);
+                }
+            } catch (e) {}
+        }
+
+        function triggerCameraFlash() {
+            playShutterSFX();
+            const flash = document.getElementById('flash-overlay');
+            flash.style.opacity = '1';
+            setTimeout(() => { flash.style.opacity = '0'; }, 300);
+        }
+
+        function toggleSFX() {
+            sfxEnabled = !sfxEnabled;
+            document.getElementById('sfx-icon').textContent = sfxEnabled ? '🔊' : '🔇';
+            document.getElementById('sfx-label').textContent = sfxEnabled ? 'SFX: ON' : 'SFX: OFF';
+        }
+
+        // Romantic Music Box Melody
+        const melodyNotes = [523.25, 659.25, 783.99, 659.25, 587.33, 698.46, 783.99, 523.25];
+        let noteIdx = 0;
+        function toggleMusic() {
+            initAudio();
+            const disc = document.getElementById('vinyl-disc');
+            const status = document.getElementById('music-status');
+            if (isMusicPlaying) {
+                clearInterval(musicInterval);
+                isMusicPlaying = false;
+                disc.style.animationPlayState = 'paused';
+                status.textContent = 'Paused';
+            } else {
+                isMusicPlaying = true;
+                disc.style.animationPlayState = 'running';
+                status.textContent = 'Romantic Waltz';
+                musicInterval = setInterval(() => {
+                    if (!sfxEnabled) return;
+                    playBeep(melodyNotes[noteIdx % melodyNotes.length], 0.45);
+                    noteIdx++;
+                }, 650);
+            }
+        }
+
+        /* ==========================================
+           3. COVER PHOTOBOX & MIRROR EXPERIENCE
+        ========================================== */
+        let coverMirrorStream = null;
+        async function toggleCoverMirror() {
+            const video = document.getElementById('cover-mirror-video');
+            const img = document.getElementById('cover-preview-img');
+            const badge = document.getElementById('mirror-badge');
+
+            if (coverMirrorStream) {
+                coverMirrorStream.getTracks().forEach(t => t.stop());
+                coverMirrorStream = null;
+                video.classList.add('hidden');
+                img.classList.remove('hidden');
+                badge.textContent = '35MM FILM';
+                return;
+            }
+            try {
+                coverMirrorStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false });
+                video.srcObject = coverMirrorStream;
+                video.classList.remove('hidden');
+                img.classList.add('hidden');
+                badge.textContent = 'LIVE MIRROR';
+            } catch (err) {
+                showToast('Akses kamera ditolak atau tidak tersedia.');
+            }
+        }
+
+        function startPhotoboxExperience() {
+            initAudio();
+            playCoinSFX();
+            const coin = document.getElementById('coin-anim');
+            coin.classList.remove('hidden');
+            coin.classList.add('animate-coin');
+            document.getElementById('led-print').className = 'w-3 h-3 rounded-full bg-amber-400 animate-ping';
+
+            const cdOverlay = document.getElementById('countdown-overlay');
+            const cdNum = document.getElementById('countdown-number');
+            cdOverlay.classList.remove('hidden');
+
+            let count = 3;
+            cdNum.textContent = count;
+            playBeep(700, 0.15);
+
+            const timer = setInterval(() => {
+                count--;
+                if (count > 0) {
+                    cdNum.textContent = count;
+                    playBeep(700, 0.15);
+                } else if (count === 0) {
+                    cdNum.textContent = 'CHEESE!';
+                    cdNum.classList.replace('text-6xl', 'text-4xl');
+                    triggerCameraFlash();
+                } else {
+                    clearInterval(timer);
+                    if (coverMirrorStream) {
+                        coverMirrorStream.getTracks().forEach(t => t.stop());
+                        coverMirrorStream = null;
+                    }
+                    document.getElementById('photobox-cover').classList.add('hidden');
+                    const mainInv = document.getElementById('main-invitation');
+                    mainInv.classList.remove('hidden');
+                    playPrinterWhirSFX();
+                    document.getElementById('photostrip-paper').classList.add('animate-print');
+                    document.getElementById('vinyl-player').classList.remove('hidden');
+                    document.getElementById('vinyl-player').classList.add('flex');
+                    if (!isMusicPlaying) toggleMusic();
+                    renderGuestPhotostripCanvas();
+                }
+            }, 850);
+        }
+
+        /* ==========================================
+           4. MAIN INVITATION CONTROLS & COUNTDOWN
+        ========================================== */
+        const couplePoses = [
+            "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=900&q=80",
+            "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=900&q=80",
+            "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=900&q=80",
+            "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=900&q=80"
+        ];
+        let currentPoseIdx = 0;
+
+        function switchCouplePose() {
+            triggerCameraFlash();
+            currentPoseIdx = (currentPoseIdx + 1) % couplePoses.length;
+            document.getElementById('couple-pose-img').src = couplePoses[currentPoseIdx];
+            document.getElementById('pose-index').textContent = currentPoseIdx + 1;
+        }
+
+        function setMainFilter(filterClass) {
+            document.querySelectorAll('.main-photo').forEach(img => {
+                img.classList.remove('filter-warm', 'filter-bw', 'filter-sepia', 'filter-90s');
+                img.classList.add(filterClass);
+            });
+            playBeep(920, 0.06);
+        }
+
+        function setStripTheme(themeClass) {
+            const paper = document.getElementById('photostrip-paper');
+            paper.classList.remove('strip-ivory', 'strip-midnight', 'strip-pink', 'strip-sage');
+            paper.classList.add(themeClass);
+            playBeep(840, 0.06);
+        }
+
+        // Countdown Timer to Oct 24, 2026
+        const weddingTarget = new Date('2026-10-24T08:00:00+07:00').getTime();
+        function updateFlipCountdown() {
+            const now = new Date().getTime();
+            const diff = Math.max(0, weddingTarget - now);
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+            document.getElementById('cd-days').textContent = String(d).padStart(2, '0');
+            document.getElementById('cd-hours').textContent = String(h).padStart(2, '0');
+            document.getElementById('cd-mins').textContent = String(m).padStart(2, '0');
+            document.getElementById('cd-secs').textContent = String(s).padStart(2, '0');
+        }
+        setInterval(updateFlipCountdown, 1000);
+        updateFlipCountdown();
+
+        /* ==========================================================
+           5. GUEST INTERACTIVE PHOTOBOX STUDIO (CAMERA, EDIT, DOWNLOAD)
+        ========================================================== */
+        let guestStream = null;
+        let currentFacingMode = 'user';
+        let activePoseSlot = 0; // 0, 1, or 2
+        let guestFilterMode = 'none'; // none, warm, bw, sepia, rose
+        let stripBgColor = '#FCFBF7';
+        let stripTextColor = '#1F1D1A';
+        let stripAccentColor = '#B84A39';
+
+        // 3 Pose Images for the Guest Strip
+        const guestPoseImages = [new Image(), new Image(), new Image()];
+        const defaultPlaceholderUrls = [
+            "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=600&q=80"
+        ];
+
+        defaultPlaceholderUrls.forEach((url, idx) => {
+            guestPoseImages[idx].crossOrigin = "anonymous";
+            guestPoseImages[idx].onload = () => renderGuestPhotostripCanvas();
+            guestPoseImages[idx].src = url;
+        });
+
+        // Interactive Stickers on Guest Photostrip Canvas
+        let guestStickers = [
+            { text: '✨', x: 520, y: 150, size: 52 },
+            { text: '❤️', x: 80, y: 520, size: 52 },
+            { text: '🥂', x: 515, y: 980, size: 52 }
+        ];
+        let selectedStickerIndex = -1;
+        let isDraggingSticker = false;
+
+        async function startGuestCamera() {
+            const video = document.getElementById('guest-camera-video');
+            const placeholder = document.getElementById('camera-off-placeholder');
+            if (guestStream) {
+                guestStream.getTracks().forEach(t => t.stop());
+            }
+            try {
+                guestStream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: currentFacingMode, width: { ideal: 1280 }, height: { ideal: 960 } },
+                    audio: false
+                });
+                video.srcObject = guestStream;
+                video.classList.remove('hidden');
+                if (currentFacingMode === 'user') {
+                    video.classList.add('scale-x-[-1]');
+                } else {
+                    video.classList.remove('scale-x-[-1]');
+                }
+                placeholder.classList.add('hidden');
+                showToast('Kamera HP aktif! Siap ambil pose.');
+            } catch (err) {
+                showToast('Tidak dapat mengakses kamera. Anda tetap bisa pilih foto dari Galeri HP!');
+            }
+        }
+
+        function switchCameraFacing() {
+            currentFacingMode = currentFacingMode === 'user' ? 'environment' : 'user';
+            startGuestCamera();
+        }
+
+        function selectPoseSlot(slotIndex) {
+            activePoseSlot = slotIndex;
+            document.getElementById('camera-slot-indicator').textContent = `Slot Aktif: Pose #${slotIndex + 1}`;
+            [0, 1, 2].forEach(i => {
+                const btn = document.getElementById(`slot-btn-${i}`);
+                if (i === slotIndex) {
+                    btn.className = "px-2.5 py-1 rounded text-[11px] font-mono bg-gold text-charcoal font-bold cursor-pointer";
+                } else {
+                    btn.className = "px-2.5 py-1 rounded text-[11px] font-mono bg-zinc-800 text-zinc-300 cursor-pointer";
+                }
+            });
+        }
+
+        function captureVideoToSlot(slotIdx) {
+            const video = document.getElementById('guest-camera-video');
+            if (!guestStream || video.classList.contains('hidden')) {
+                showToast('Aktifkan kamera terlebih dahulu atau unggah dari galeri HP.');
+                return false;
+            }
+            triggerCameraFlash();
+
+            const tempCanvas = document.createElement('canvas');
+            tempCanvas.width = 800;
+            tempCanvas.height = 600;
+            const tCtx = tempCanvas.getContext('2d');
+
+            // Center crop 4:3
+            const vw = video.videoWidth || 640;
+            const vh = video.videoHeight || 480;
+            const targetRatio = 4 / 3;
+            let sx = 0, sy = 0, sw = vw, sh = vh;
+            if (vw / vh > targetRatio) {
+                sw = vh * targetRatio;
+                sx = (vw - sw) / 2;
+            } else {
+                sh = vw / targetRatio;
+                sy = (vh - sh) / 2;
+            }
+
+            tCtx.save();
+            if (currentFacingMode === 'user') {
+                tCtx.translate(tempCanvas.width, 0);
+                tCtx.scale(-1, 1);
+            }
+            tCtx.drawImage(video, sx, sy, sw, sh, 0, 0, tempCanvas.width, tempCanvas.height);
+            tCtx.restore();
+
+            const capturedImg = new Image();
+            capturedImg.onload = () => {
+                guestPoseImages[slotIdx] = capturedImg;
+                renderGuestPhotostripCanvas();
+            };
+            capturedImg.src = tempCanvas.toDataURL('image/jpeg', 0.92);
+            return true;
+        }
+
+        function captureSinglePose() {
+            if (captureVideoToSlot(activePoseSlot)) {
+                showToast(`Pose #${activePoseSlot + 1} berhasil dijepret!`);
+                selectPoseSlot((activePoseSlot + 1) % 3);
+            }
+        }
+
+        async function startAuto3PoseBooth() {
+            if (!guestStream) {
+                await startGuestCamera();
+                if (!guestStream) return;
+            }
+            const cdBox = document.getElementById('guest-booth-countdown');
+            const cdLabel = document.getElementById('guest-booth-pose-label');
+            const cdNum = document.getElementById('guest-booth-cd-num');
+            cdBox.classList.remove('hidden');
+
+            for (let pose = 0; pose < 3; pose++) {
+                selectPoseSlot(pose);
+                cdLabel.textContent = `SIAP POSE #${pose + 1}`;
+                for (let c = 3; c >= 1; c--) {
+                    cdNum.textContent = c;
+                    playBeep(780, 0.12);
+                    await new Promise(r => setTimeout(r, 850));
+                }
+                cdNum.textContent = '📸';
+                captureVideoToSlot(pose);
+                await new Promise(r => setTimeout(r, 650));
+            }
+            cdBox.classList.add('hidden');
+            showToast('3 Pose selesai! Silakan edit filter, stiker & unduh strip fotobox-mu.');
+        }
+
+        function handleGalleryUpload(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const img = new Image();
+                img.onload = () => {
+                    guestPoseImages[activePoseSlot] = img;
+                    renderGuestPhotostripCanvas();
+                    showToast(`Foto galeri dimasukkan ke Pose #${activePoseSlot + 1}!`);
+                    selectPoseSlot((activePoseSlot + 1) % 3);
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        /* ==========================================
+           6. CANVAS RENDERING (STRIP + WEDDING FOOTER)
+        ========================================== */
+        function setGuestStripFilter(mode) {
+            guestFilterMode = mode;
+            ['none', 'warm', 'bw', 'sepia', 'rose'].forEach(m => {
+                const btn = document.getElementById(`gfilter-${m}`);
+                if (m === mode) {
+                    btn.className = "px-2.5 py-1 rounded text-[11px] font-mono bg-terracotta text-white cursor-pointer";
+                } else {
+                    btn.className = "px-2.5 py-1 rounded text-[11px] font-mono bg-zinc-800 text-zinc-300 hover:bg-zinc-700 cursor-pointer";
+                }
+            });
+            renderGuestPhotostripCanvas();
+        }
+
+        function setGuestStripBg(bg, text, accent) {
+            stripBgColor = bg;
+            stripTextColor = text;
+            stripAccentColor = accent;
+            renderGuestPhotostripCanvas();
+        }
+
+        function addGuestSticker(stickerText) {
+            guestStickers.push({
+                text: stickerText,
+                x: 300 + (Math.random() * 120 - 60),
+                y: 450 + (Math.random() * 300 - 150),
+                size: stickerText.length > 2 ? 28 : 56
+            });
+            selectedStickerIndex = guestStickers.length - 1;
+            playBeep(1080, 0.06);
+            renderGuestPhotostripCanvas();
+        }
+
+        function resizeSelectedSticker(scaleFactor) {
+            if (selectedStickerIndex < 0 || !guestStickers[selectedStickerIndex]) {
+                showToast('Sentuh/klik salah satu stiker di strip terlebih dahulu!');
+                return;
+            }
+            guestStickers[selectedStickerIndex].size = Math.max(18, Math.min(120, guestStickers[selectedStickerIndex].size * scaleFactor));
+            renderGuestPhotostripCanvas();
+        }
+
+        function deleteSelectedSticker() {
+            if (selectedStickerIndex < 0 || !guestStickers[selectedStickerIndex]) {
+                showToast('Sentuh/klik stiker yang ingin dihapus!');
+                return;
+            }
+            guestStickers.splice(selectedStickerIndex, 1);
+            selectedStickerIndex = -1;
+            renderGuestPhotostripCanvas();
+        }
+
+        function renderGuestPhotostripCanvas(hideSelectionRing = false) {
+            const canvas = document.getElementById('guest-strip-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const W = canvas.width;   // 600
+            const H = canvas.height;  // 1620
+
+            // 1. Strip Paper Background
+            ctx.fillStyle = stripBgColor;
+            ctx.fillRect(0, 0, W, H);
+
+            // Outer Decorative Border
+            ctx.strokeStyle = stripAccentColor;
+            ctx.lineWidth = 4;
+            ctx.strokeRect(16, 16, W - 32, H - 32);
+
+            // 2. Top Film Header
+            ctx.fillStyle = stripTextColor;
+            ctx.font = 'bold 16px "Courier Prime", monospace';
+            ctx.textAlign = 'left';
+            ctx.fillText('ANALOG PHOTOBOX • 35MM', 36, 54);
+            ctx.textAlign = 'right';
+            ctx.fillText('#RAMA-SINTA-2026', W - 36, 54);
+
+            // 3. Draw 3 Guest Pose Frames
+            const frameX = 40;
+            const frameW = W - 80; // 520
+            const frameH = 365;
+            const gap = 26;
+            const startY = 76;
+
+            for (let i = 0; i < 3; i++) {
+                const fy = startY + i * (frameH + gap);
+
+                // Frame Shadow & Backing
+                ctx.fillStyle = '#111111';
+                ctx.fillRect(frameX - 4, fy - 4, frameW + 8, frameH + 8);
+
+                const img = guestPoseImages[i];
+                if (img && img.complete && img.naturalWidth > 0) {
+                    ctx.save();
+                    // Apply Selected Filter
+                    if (guestFilterMode === 'bw') {
+                        ctx.filter = 'grayscale(100%) contrast(118%)';
+                    } else if (guestFilterMode === 'sepia') {
+                        ctx.filter = 'sepia(80%) contrast(110%) brightness(95%)';
+                    } else if (guestFilterMode === 'warm') {
+                        ctx.filter = 'sepia(22%) contrast(106%) saturate(120%)';
+                    } else if (guestFilterMode === 'rose') {
+                        ctx.filter = 'contrast(105%) saturate(125%) hue-rotate(-10deg)';
+                    } else {
+                        ctx.filter = 'none';
+                    }
+
+                    // Cover Crop Image inside Frame
+                    const iw = img.naturalWidth;
+                    const ih = img.naturalHeight;
+                    const targetRatio = frameW / frameH;
+                    let sx = 0, sy = 0, sw = iw, sh = ih;
+                    if (iw / ih > targetRatio) {
+                        sw = ih * targetRatio;
+                        sx = (iw - sw) / 2;
+                    } else {
+                        sh = iw / targetRatio;
+                        sy = (ih - sh) / 2;
+                    }
+                    ctx.drawImage(img, sx, sy, sw, sh, frameX, fy, frameW, frameH);
+                    ctx.restore();
+
+                    // Soft Color Tint Overlay for Warm/Rose if mobile browser ignores ctx.filter
+                    if (guestFilterMode === 'sepia') {
+                        ctx.fillStyle = 'rgba(112, 66, 20, 0.22)';
+                        ctx.fillRect(frameX, fy, frameW, frameH);
+                    } else if (guestFilterMode === 'rose') {
+                        ctx.fillStyle = 'rgba(225, 130, 150, 0.16)';
+                        ctx.fillRect(frameX, fy, frameW, frameH);
+                    }
+                } else {
+                    ctx.fillStyle = '#27272a';
+                    ctx.fillRect(frameX, fy, frameW, frameH);
+                }
+
+                // Quartz Timestamp on Each Frame
+                ctx.fillStyle = '#FF6B2B';
+                ctx.font = 'bold 18px "Courier Prime", monospace';
+                ctx.textAlign = 'right';
+                ctx.fillText(`'26 10 24  0${i + 1}`, frameX + frameW - 16, fy + frameH - 16);
+            }
+
+            // 4. OFFICIAL WEDDING FOOTER BELOW THE PHOTOSTRIP
+            const footerTop = startY + 3 * (frameH + gap) + 12; // ~1261
+
+            // Divider Line
+            ctx.strokeStyle = stripAccentColor;
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(60, footerTop);
+            ctx.lineTo(W - 60, footerTop);
+            ctx.stroke();
+
+            // Guest Custom Note / Badge
+            const guestCaption = document.getElementById('guest-strip-caption')?.value || guestNameParam;
+            ctx.fillStyle = stripAccentColor;
+            ctx.font = 'bold 17px "Courier Prime", monospace';
+            ctx.textAlign = 'center';
+            ctx.fillText(`★ ${guestCaption.toUpperCase()} ★`, W / 2, footerTop + 34);
+
+            // THE WEDDING OF + BRIDE & GROOM NAMES
+            ctx.fillStyle = stripTextColor;
+            ctx.font = 'italic 18px "Playfair Display", Georgia, serif';
+            ctx.fillText('The Wedding Of', W / 2, footerTop + 68);
+
+            ctx.font = 'bold 46px "Playfair Display", Georgia, serif';
+            ctx.fillText('Rama & Sinta', W / 2, footerTop + 118);
+
+            // WEDDING DATE
+            ctx.fillStyle = stripAccentColor;
+            ctx.font = 'bold 20px "Courier Prime", monospace';
+            ctx.fillText('SABTU, 24 OKTOBER 2026', W / 2, footerTop + 154);
+
+            // WEDDING LOCATION / VENUE
+            ctx.fillStyle = stripTextColor;
+            ctx.font = 'bold 17px "Plus Jakarta Sans", sans-serif';
+            ctx.fillText('📍 Glass House — The Dharmawangsa Jakarta', W / 2, footerTop + 186);
+
+            ctx.font = '14px "Courier Prime", monospace';
+            ctx.fillText('Jl. Brawijaya Raya No. 26, Kebayoran Baru, Jakarta Selatan', W / 2, footerTop + 210);
+
+            // Bottom Retro Barcode & Serial Stamp
+            ctx.font = '12px "Courier Prime", monospace';
+            ctx.fillText('OFFICIAL DIGITAL PHOTOBOX SOUVENIR • THANK YOU FOR CELEBRATING WITH US', W / 2, H - 32);
+
+            // 5. Draw Interactive Stickers on Top
+            guestStickers.forEach((st, idx) => {
+                ctx.save();
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                if (st.text.length > 2) {
+                    // Badge sticker
+                    ctx.font = `bold ${st.size}px "Caveat", cursive`;
+                    const metrics = ctx.measureText(st.text);
+                    const padX = 16, padY = 10;
+                    ctx.fillStyle = '#B84A39';
+                    ctx.fillRect(st.x - metrics.width / 2 - padX, st.y - st.size / 2 - padY / 2, metrics.width + padX * 2, st.size + padY);
+                    ctx.strokeStyle = '#FCFBF7';
+                    ctx.lineWidth = 2;
+                    ctx.strokeRect(st.x - metrics.width / 2 - padX, st.y - st.size / 2 - padY / 2, metrics.width + padX * 2, st.size + padY);
+                    ctx.fillStyle = '#FCFBF7';
+                    ctx.fillText(st.text, st.x, st.y);
+                } else {
+                    ctx.font = `${st.size}px sans-serif`;
+                    ctx.fillText(st.text, st.x, st.y);
+                }
+
+                // Highlight ring when selected
+                if (!hideSelectionRing && idx === selectedStickerIndex) {
+                    ctx.strokeStyle = '#C99E5A';
+                    ctx.lineWidth = 3;
+                    ctx.setLineDash([6, 4]);
+                    ctx.beginPath();
+                    ctx.arc(st.x, st.y, st.size * 0.85, 0, Math.PI * 2);
+                    ctx.stroke();
+                }
+                ctx.restore();
+            });
+        }
+
+        // Touch & Mouse Dragging for Stickers on Canvas
+        const stripCanvas = document.getElementById('guest-strip-canvas');
+
+        function getCanvasPointerPos(evt) {
+            const rect = stripCanvas.getBoundingClientRect();
+            const clientX = evt.touches ? evt.touches[0].clientX : evt.clientX;
+            const clientY = evt.touches ? evt.touches[0].clientY : evt.clientY;
+            return {
+                x: (clientX - rect.left) * (stripCanvas.width / rect.width),
+                y: (clientY - rect.top) * (stripCanvas.height / rect.height)
+            };
+        }
+
+        function onCanvasPointerDown(evt) {
+            const pos = getCanvasPointerPos(evt);
+            for (let i = guestStickers.length - 1; i >= 0; i--) {
+                const st = guestStickers[i];
+                const dist = Math.hypot(pos.x - st.x, pos.y - st.y);
+                if (dist <= Math.max(48, st.size)) {
+                    selectedStickerIndex = i;
+                    isDraggingSticker = true;
+                    renderGuestPhotostripCanvas();
+                    if (evt.cancelable) evt.preventDefault();
+                    return;
+                }
+            }
+            selectedStickerIndex = -1;
+            renderGuestPhotostripCanvas();
+        }
+
+        function onCanvasPointerMove(evt) {
+            if (!isDraggingSticker || selectedStickerIndex < 0) return;
+            if (evt.cancelable) evt.preventDefault();
+            const pos = getCanvasPointerPos(evt);
+            guestStickers[selectedStickerIndex].x = Math.max(40, Math.min(stripCanvas.width - 40, pos.x));
+            guestStickers[selectedStickerIndex].y = Math.max(40, Math.min(stripCanvas.height - 40, pos.y));
+            renderGuestPhotostripCanvas();
+        }
+
+        function onCanvasPointerUp() {
+            isDraggingSticker = false;
+        }
+
+        stripCanvas.addEventListener('mousedown', onCanvasPointerDown);
+        stripCanvas.addEventListener('mousemove', onCanvasPointerMove);
+        window.addEventListener('mouseup', onCanvasPointerUp);
+
+        stripCanvas.addEventListener('touchstart', onCanvasPointerDown, { passive: false });
+        stripCanvas.addEventListener('touchmove', onCanvasPointerMove, { passive: false });
+        window.addEventListener('touchend', onCanvasPointerUp);
+
+        // Download High-Res Guest Photostrip PNG
+        function downloadGuestPhotostrip() {
+            renderGuestPhotostripCanvas(true); // Render cleanly without selection ring
+            const link = document.createElement('a');
+            const cleanName = (document.getElementById('guest-strip-caption').value || 'Tamu').replace(/[^a-z0-9]/gi, '_');
+            link.download = `Photobox_Rama_Sinta_${cleanName}.png`;
+            link.href = stripCanvas.toDataURL('image/png');
+            link.click();
+            renderGuestPhotostripCanvas(false);
+            playShutterSFX();
+            showToast('Strip Fotobox berhasil diunduh ke HP Anda!');
+        }
+
+        let attachedStripDataUrl = null;
+        function attachStripToRSVP() {
+            renderGuestPhotostripCanvas(true);
+            attachedStripDataUrl = stripCanvas.toDataURL('image/jpeg', 0.85);
+            renderGuestPhotostripCanvas(false);
+            showToast('Strip fotobox siap ditempel bersama ucapan RSVP Anda!');
+        }
+
+        /* ==========================================
+           7. POLAROID RSVP CORKBOARD SUBMISSION
+        ========================================== */
+        function escapeHtml(str) {
+            return String(str).replace(/[&<>"']/g, function(m) {
+                return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' })[m];
+            });
+        }
+
+        function submitPolaroidRSVP(e) {
+            e.preventDefault();
+            const name = document.getElementById('rsvp-name').value.trim();
+            const status = document.getElementById('rsvp-attendance').value;
+            const msg = document.getElementById('rsvp-message').value.trim();
+            if (!name || !msg) return;
+
+            // Always grab latest guest strip preview
+            renderGuestPhotostripCanvas(true);
+            const stripThumb = attachedStripDataUrl || stripCanvas.toDataURL('image/jpeg', 0.8);
+            renderGuestPhotostripCanvas(false);
+
+            const wall = document.getElementById('polaroid-wall');
+            const card = document.createElement('div');
+            card.className = "bg-ivory text-charcoal p-3 pb-4 rounded shadow-xl rotate-[-1deg] relative";
+
+            const badgeColor = status === 'Hadir' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800';
+
+            card.innerHTML = `
+                <div class="washi-tape w-20 h-5 absolute -top-2.5 left-1/2 -translate-x-1/2"></div>
+                <div class="flex items-center justify-between border-b border-zinc-300 pb-1.5 mb-2">
+                    <span class="font-serif font-bold text-sm">${escapeHtml(name)}</span>
+                    <span class="font-mono text-[10px] ${badgeColor} px-2 py-0.5 rounded font-bold">${escapeHtml(status)}</span>
+                </div>
+                <div class="flex gap-3 items-start mt-2">
+                    <img src="${stripThumb}" alt="Photostrip" class="w-16 rounded border border-zinc-300 shadow-sm shrink-0">
+                    <p class="font-hand text-lg leading-snug text-zinc-800">"${escapeHtml(msg)}"</p>
+                </div>
+                <p class="font-mono text-[9px] text-zinc-400 mt-2 text-right">Baru saja</p>
+            `;
+
+            wall.prepend(card);
+            const countEl = document.getElementById('rsvp-count');
+            countEl.textContent = parseInt(countEl.textContent) + 1;
+            document.getElementById('rsvp-message').value = '';
+            playShutterSFX();
+            showToast('Ucapan & Strip Fotobox Anda berhasil ditempel di Papan Gabus!');
+        }
+    </script>
+</body>
+</html>
+```
+
+Seluruh pembaruan kini sudah terkompilasi di dalam satu file `index.html` dan dapat langsung Anda coba melalui tombol **Preview**. Tamu dapat mengambil 3 pose foto menggunakan kamera HP mereka, mengedit filter & menempel stiker, lalu mengunduh strip fotobox yang sudah mencantumkan nama pengantin (**Rama & Sinta**), tanggal (**Sabtu, 24 Oktober 2026**), serta lokasi pernikahan (**Glass House — The Dharmawangsa Jakarta**).
