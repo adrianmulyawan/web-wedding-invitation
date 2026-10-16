@@ -539,6 +539,7 @@
         { text: '🥂', x: 515, y: 975, size: 52 }
     ];
     let selectedSticker = -1, isDragging = false;
+    let isCapturing = false;
 
     /* Boomerang state */
     let isRecordingBoomerang = false;
@@ -783,14 +784,17 @@
 
     /* Capture single pose with countdown */
     function snapSinglePose() {
+        if (isCapturing) return;
+        isCapturing = true;
         initAudio();
+        const targetSlot = activePose; // Capture the active slot at click time
         const ov = document.getElementById('cam-countdown-overlay');
         const num = document.getElementById('cam-countdown-number');
         const lbl = document.getElementById('cam-countdown-label');
         ov.classList.remove('hidden');
         let count = 3;
         num.textContent = count;
-        lbl.textContent = `Pose #${activePose + 1}...`;
+        lbl.textContent = `Pose #${targetSlot + 1}...`;
         playBeep(700, .14);
 
         const iv = setInterval(() => {
@@ -805,30 +809,53 @@
                 clearInterval(iv);
                 ov.classList.add('hidden');
                 flash();
-                captureActiveFrame();
-                if (activePose < totalSlots - 1) {
-                    activePose++;
-                    updateSlotButtons();
-                }
+                captureActiveFrame(targetSlot);
+                const nextSlot = (targetSlot + 1) % totalSlots;
+                activePose = nextSlot;
+                updateSlotButtons();
+                isCapturing = false;
             }
         }, 850);
     }
 
-    function captureActiveFrame() {
+    function captureActiveFrame(targetSlot = activePose) {
         const v = document.getElementById('guest-camera-video');
         const cv = document.createElement('canvas');
-        cv.width = 640; cv.height = 480;
+        const vw = (v && v.videoWidth > 0) ? v.videoWidth : 640;
+        const vh = (v && v.videoHeight > 0) ? v.videoHeight : 480;
+        cv.width = vw; cv.height = vh;
         const ctx = cv.getContext('2d');
-        if (currentFacing === 'user') {
-            ctx.translate(640, 0); ctx.scale(-1, 1);
+
+        if (v && v.readyState >= 2 && v.videoWidth > 0) {
+            if (currentFacing === 'user') {
+                ctx.translate(vw, 0); ctx.scale(-1, 1);
+            }
+            ctx.drawImage(v, 0, 0, vw, vh);
+        } else {
+            // Elegant fallback snapshot if camera is still initializing or in test mode
+            const g = ctx.createLinearGradient(0, 0, vw, vh);
+            g.addColorStop(0, '#2b231d');
+            g.addColorStop(1, '#181615');
+            ctx.fillStyle = g;
+            ctx.fillRect(0, 0, vw, vh);
+            ctx.fillStyle = '#C99E5A';
+            ctx.font = 'bold 32px "Playfair Display", serif';
+            ctx.textAlign = 'center';
+            ctx.fillText(`✨ Pose #${targetSlot + 1}`, vw / 2, vh / 2 - 20);
+            ctx.font = '16px "Courier Prime", monospace';
+            ctx.fillStyle = '#F6F1E7';
+            ctx.fillText('Rama & Sinta Wedding Souvenir', vw / 2, vh / 2 + 16);
+            ctx.font = '12px "Courier Prime", monospace';
+            ctx.fillStyle = '#C99E5A';
+            ctx.fillText('24 OKTOBER 2026', vw / 2, vh / 2 + 42);
         }
-        ctx.drawImage(v, 0, 0, 640, 480);
+
         const img = new Image();
         img.onload = () => {
-            guestImages[activePose] = img;
+            guestImages[targetSlot] = img;
             updateSlotButtons();
             renderCanvas();
-            showToast(`✅ Pose #${activePose + 1} berhasil diambil!`);
+            showToast(`✅ Pose #${targetSlot + 1} berhasil diambil!`);
         };
         img.src = cv.toDataURL('image/jpeg', .92);
     }
@@ -869,7 +896,7 @@
                     clearInterval(iv);
                     ov.classList.add('hidden');
                     flash();
-                    captureActiveFrame();
+                    captureActiveFrame(slotIdx);
                     setTimeout(() => captureStep(slotIdx + 1), 1200);
                 }
             }, 800);
@@ -882,22 +909,22 @@
     function handleGalleryUpload(e) {
         const file = e.target.files && e.target.files[0];
         if (!file) return;
+        const targetSlot = activePose;
         const reader = new FileReader();
         reader.onload = ev => {
             const img = new Image();
             img.onload = () => {
-                guestImages[activePose] = img;
+                guestImages[targetSlot] = img;
+                const nextSlot = (targetSlot + 1) % totalSlots;
+                activePose = nextSlot;
                 updateSlotButtons();
                 renderCanvas();
-                showToast(`✅ Foto galeri dimasukkan ke Pose #${activePose + 1}!`);
-                if (activePose < totalSlots - 1) {
-                    activePose++;
-                    updateSlotButtons();
-                }
+                showToast(`✅ Foto galeri dimasukkan ke Pose #${targetSlot + 1}!`);
             };
             img.src = ev.target.result;
         };
         reader.readAsDataURL(file);
+        e.target.value = '';
     }
 
     /* Customization handlers */
@@ -1006,13 +1033,21 @@
     function renderCanvas() {
         const cv = document.getElementById('photostrip-canvas');
         if (!cv) return;
+        let cols = 1, rows = 3, W = 600;
+        if (currentLayout === '1x3') { cols = 1; rows = 3; W = 600; }
+        else if (currentLayout === '1x4') { cols = 1; rows = 4; W = 600; }
+        else if (currentLayout === '2x2') { cols = 2; rows = 2; W = 700; }
+        else if (currentLayout === '2x3') { cols = 2; rows = 3; W = 700; }
 
-        let W = 600, H = 1400;
-        let cols = 1, rows = 3;
-        if (currentLayout === '1x3') { W = 600; H = 1420; cols = 1; rows = 3; }
-        else if (currentLayout === '1x4') { W = 600; H = 1820; cols = 1; rows = 4; }
-        else if (currentLayout === '2x2') { W = 700; H = 1100; cols = 2; rows = 2; }
-        else if (currentLayout === '2x3') { W = 700; H = 1480; cols = 2; rows = 3; }
+        const padX = (cols === 1) ? 44 : 36;
+        const gapX = 20, gapY = 22;
+        const availableW = W - padX * 2 - (cols - 1) * gapX;
+        const slotW = availableW / cols;
+        const slotH = (cols === 1) ? (slotW * 0.78) : (slotW * 0.88);
+        const startY = 88;
+        const slotsBottom = startY + rows * (slotH + gapY);
+        const footerHeightNeeded = 245;
+        const H = Math.ceil(slotsBottom + footerHeightNeeded);
 
         cv.width = W; cv.height = H;
         const ctx = cv.getContext('2d');
@@ -1157,13 +1192,6 @@
         drawSprockets(64);
 
         // Photo Slots
-        const padX = (cols === 1) ? 44 : 36;
-        const gapX = 20, gapY = 22;
-        const availableW = W - padX * 2 - (cols - 1) * gapX;
-        const slotW = availableW / cols;
-        const slotH = (cols === 1) ? (slotW * 0.78) : (slotW * 0.88);
-        const startY = 88;
-
         for (let r = 0; r < rows; r++) {
             for (let c = 0; c < cols; c++) {
                 const idx = r * cols + c;
@@ -1244,7 +1272,6 @@
             }
         }
 
-        const slotsBottom = startY + rows * (slotH + gapY);
         drawSprockets(slotsBottom - 8);
 
         // Footer Section
@@ -1272,7 +1299,8 @@
         ctx.fillText('24 OKTOBER 2026 · THE DHARMAWANGSA JAKARTA', W / 2, footerY + 84);
 
         // Caption
-        const captionVal = document.getElementById('guest-strip-caption').value || 'Sahabat & Keluarga Rama Sinta';
+        const captionInput = document.getElementById('guest-strip-caption');
+        const captionVal = (captionInput && captionInput.value.trim()) ? captionInput.value.trim() : 'Sahabat & Keluarga Rama Sinta';
         ctx.fillStyle = accentColor;
         ctx.font = 'italic 700 15px "Courier Prime", monospace';
         ctx.fillText(`“ ${captionVal} ”`, W / 2, footerY + 112);
@@ -1292,6 +1320,9 @@
             curX += b * 2 + 2;
         });
         ctx.globalAlpha = 1.0;
+
+        // Bottom sprocket row
+        drawSprockets(H - 22);
         ctx.textAlign = 'left';
 
         // Draw Stickers
@@ -1568,12 +1599,16 @@
             showToast('⚠️ Belum ada rekaman Boomerang.');
             return;
         }
+        const targetSlot = activePose;
         const cv = document.getElementById('boomerang-canvas');
         const img = new Image();
         img.onload = () => {
-            guestImages[activePose] = img;
+            guestImages[targetSlot] = img;
+            const nextSlot = (targetSlot + 1) % totalSlots;
+            activePose = nextSlot;
+            updateSlotButtons();
             renderCanvas();
-            showToast(`✅ Frame Boomerang dimasukkan ke Pose #${activePose + 1}!`);
+            showToast(`✅ Frame Boomerang dimasukkan ke Pose #${targetSlot + 1}!`);
             switchStudioMode('strip');
         };
         img.src = cv.toDataURL('image/jpeg', .92);
