@@ -66,6 +66,15 @@
         .gfilter-btn.active{background:#B84A39;color:#FCFBF7;border-color:#B84A39}
         .sticker-btn{background:#1a1815;border:1px solid #3a3530;padding:6px 10px;border-radius:8px;font-size:1.1rem;cursor:pointer;transition:all .15s ease;line-height:1}
         .sticker-btn:hover{background:#2a2520;border-color:#C99E5A;transform:scale(1.1)}
+        .layout-btn{background:#1a1815;border:1px solid #3a3530;transition:all .2s ease}
+        .layout-btn:hover{border-color:#C99E5A;background:#24201a}
+        .layout-btn.active{background:linear-gradient(135deg,#B84A39 0%,#7a2015 100%);border-color:#C99E5A;box-shadow:0 0 14px rgba(184,74,57,.45)}
+        .studio-mode-btn{background:#1a1815;color:#9ca3af;border:1px solid #3a3530;transition:all .2s ease}
+        .studio-mode-btn:hover{border-color:#C99E5A;color:#FCFBF7}
+        .studio-mode-btn.active{background:linear-gradient(135deg,#C99E5A 0%,#9e7530 100%);color:#1F1D1A;font-weight:700;border-color:#C99E5A;box-shadow:0 0 14px rgba(201,158,90,.35)}
+        .rec-pulse{animation:recBlink 1s ease-in-out infinite}
+        @keyframes recBlink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.92)}}
+        .scanlines{background:linear-gradient(rgba(18,16,16,0) 50%,rgba(0,0,0,.35) 50%),linear-gradient(90deg,rgba(255,0,0,.04),rgba(0,255,0,.02),rgba(0,255,0,.04));background-size:100% 3px,4px 100%}
         input,select,textarea{font-family:'Courier Prime',monospace}
         .hidden{display:none!important}
     </style>
@@ -186,8 +195,8 @@
                     <button id="btn-cover-mirror" onclick="toggleCoverMirror()" class="col-span-1 flex flex-col items-center justify-center gap-1.5 rounded-2xl py-3 px-2 font-mono text-[11px] text-cream transition cursor-pointer active:scale-95" style="background:linear-gradient(135deg,#2a2820 0%,#1a1814 100%);border:1px solid #3a3830">
                         <span class="text-xl">&#128254;</span><span>Cermin</span>
                     </button>
-                    <button id="btn-start-booth" onclick="startPhotoboxExperience()" class="col-span-2 flex items-center justify-center gap-2.5 rounded-2xl py-4 font-mono font-black text-cream uppercase tracking-widest text-sm transition cursor-pointer active:scale-95" style="background:linear-gradient(135deg,#B84A39 0%,#8a2020 50%,#B84A39 100%);border:1px solid rgba(201,158,90,.5);box-shadow:0 8px 24px rgba(184,74,57,.4),inset 0 1px 0 rgba(255,255,255,.1)">
-                        <span class="text-xl">&#129745;</span><span class="text-xs leading-tight">Insert Coin<br>&amp; Cetak</span>
+                    <button id="btn-start-booth" onclick="startPhotoboxExperience()" class="col-span-2 flex items-center justify-center gap-2.5 rounded-2xl py-4 font-mono font-black text-cream uppercase tracking-wider text-sm transition cursor-pointer active:scale-95" style="background:linear-gradient(135deg,#B84A39 0%,#8a2020 50%,#B84A39 100%);border:1px solid rgba(201,158,90,.5);box-shadow:0 8px 24px rgba(184,74,57,.4),inset 0 1px 0 rgba(255,255,255,.1)">
+                        <span class="text-2xl">&#9993;&#65039;</span><span class="text-xs sm:text-sm font-bold leading-tight tracking-wider">Buka Undangan</span>
                     </button>
                 </div>
 
@@ -200,7 +209,7 @@
                         </div>
                         <div class="font-mono leading-tight">
                             <p class="text-[11px] text-gold font-bold">FREE ADMISSION</p>
-                            <p class="text-[10px] text-zinc-500">Tekan tombol untuk mulai</p>
+                            <p class="text-[10px] text-zinc-500">Tekan Buka Undangan untuk mulai</p>
                         </div>
                     </div>
                     <div class="w-28 h-3 rounded-full" style="background:#050505;border:2px solid #2a2820;box-shadow:inset 0 2px 4px rgba(0,0,0,.9)"></div>
@@ -218,31 +227,28 @@
 ============================================================ -->
 <main id="main-invitation" class="hidden min-h-screen w-full pb-28 pt-5 px-3 md:px-6 flex flex-col items-center" style="background:linear-gradient(180deg,#0d0c0a 0%,#1F1D1A 10%)">
 
-    <!-- STICKY STUDIO BAR (FR-04) -->
-    <div class="sticky top-3 z-30 w-full max-w-[460px] mb-5">
-        <div class="glass border border-gold/30 rounded-2xl p-3 shadow-2xl text-cream">
-            <div class="flex flex-wrap items-center justify-between gap-2">
-                <div class="flex items-center gap-1.5">
-                    <span class="font-mono text-[9px] uppercase text-gold/80 tracking-wider">Filter:</span>
-                    <button onclick="setMainFilter('')"            class="studio-btn active" id="mf-normal">Normal</button>
-                    <button onclick="setMainFilter('filter-warm')" class="studio-btn" id="mf-warm">Warm</button>
-                    <button onclick="setMainFilter('filter-bw')"   class="studio-btn" id="mf-bw">B&amp;W</button>
-                    <button onclick="setMainFilter('filter-sepia')" class="studio-btn" id="mf-sepia">Sepia</button>
-                    <button onclick="setMainFilter('filter-90s')"  class="studio-btn" id="mf-90s">90s</button>
-                </div>
-                <div class="flex items-center gap-1.5">
-                    <span class="font-mono text-[9px] uppercase text-gold/80 tracking-wider">Kertas:</span>
-                    <button onclick="setStripTheme('strip-ivory')"    title="Ivory"      class="w-5 h-5 rounded-full border-2 border-gold cursor-pointer" style="background:#FCFBF7"></button>
-                    <button onclick="setStripTheme('strip-midnight')" title="Midnight"   class="w-5 h-5 rounded-full border-2 border-gold cursor-pointer" style="background:#1A1918"></button>
-                    <button onclick="setStripTheme('strip-pink')"     title="Dusty Pink" class="w-5 h-5 rounded-full border-2 border-zinc-300 cursor-pointer" style="background:#F5E0E5"></button>
-                    <button onclick="setStripTheme('strip-sage')"     title="Matcha Sage" class="w-5 h-5 rounded-full border-2 border-zinc-300 cursor-pointer" style="background:#DCE5D8"></button>
-                </div>
+    <!-- CLEAN FLOATING NAVIGATION BAR (Replaces crowded studio bar) -->
+    <div class="sticky top-3 z-30 w-full max-w-[440px] mb-4 px-1">
+        <nav class="glass border border-gold/40 rounded-full px-3 py-2 shadow-2xl text-cream flex items-center justify-between backdrop-blur-md">
+            <a href="#photostrip-paper" class="flex items-center gap-1.5 font-serif font-bold text-sm text-gold hover:opacity-80 transition pl-1">
+                <span class="text-xs">✦</span>
+                <span class="tracking-wide">Rama &amp; Sinta</span>
+            </a>
+            <div class="flex items-center gap-1 sm:gap-1.5">
+                <a href="#frame-couple" class="font-mono text-[10px] sm:text-[11px] px-2.5 py-1 rounded-full text-zinc-300 hover:text-gold hover:bg-white/10 transition flex items-center gap-1">
+                    <span>💍</span><span>Mempelai</span>
+                </a>
+                <a href="#frame-event" class="font-mono text-[10px] sm:text-[11px] px-2.5 py-1 rounded-full text-zinc-300 hover:text-gold hover:bg-white/10 transition flex items-center gap-1">
+                    <span>📅</span><span>Acara</span>
+                </a>
+                <a href="#guest-photobox-studio" class="font-mono text-[10px] sm:text-[11px] font-bold px-2.5 py-1 rounded-full bg-gold/15 text-gold border border-gold/40 hover:bg-gold/25 transition flex items-center gap-1">
+                    <span>📸</span><span>Photobox</span>
+                </a>
+                <a href="#rsvp-section" class="font-mono text-[10px] sm:text-[11px] px-2.5 py-1 rounded-full text-zinc-300 hover:text-gold hover:bg-white/10 transition flex items-center gap-1">
+                    <span>✍️</span><span>RSVP</span>
+                </a>
             </div>
-            <div class="mt-2.5 pt-2.5 border-t border-white/10 flex items-center justify-between gap-2">
-                <span class="font-mono text-[10px] text-zinc-400">Ambil selfie &amp; cetak strip fotoboxmu</span>
-                <a href="#guest-photobox-studio" class="flex items-center gap-1 font-mono text-[10px] font-bold text-charcoal px-3 py-1.5 rounded-full transition cursor-pointer" style="background:linear-gradient(135deg,#C99E5A 0%,#a07830 100%)">&#128248; Foto Sekarang</a>
-            </div>
-        </div>
+        </nav>
     </div>
 
     <!-- Printer slot visual -->
@@ -257,13 +263,35 @@
         </div>
 
         <!-- FRAME 01: THE COUPLE (FR-05) -->
-        <div class="px-5 pt-5 pb-6">
+        <div id="frame-couple" class="px-5 pt-5 pb-6 scroll-mt-20">
             <div class="text-[10px] font-mono opacity-50 mb-3 flex justify-between"><span>FRAME 01 // THE COUPLE</span><span>35MM &#9650;</span></div>
-            <div class="relative w-full overflow-hidden group" style="aspect-ratio:4/5;background:#111;box-shadow:0 6px 24px rgba(0,0,0,.4)">
+            <div class="relative w-full overflow-hidden group rounded-xl" style="aspect-ratio:4/5;background:#111;box-shadow:0 6px 24px rgba(0,0,0,.4)">
                 <img id="couple-pose-img" src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=900&q=80" alt="Couple Pose" onerror="this.src='https://placehold.co/800x1000/111/F6F1E7?text=Rama+%26+Sinta'" class="main-photo w-full h-full object-cover filter-warm transition-all duration-600">
                 <div class="absolute bottom-3 right-4 quartz-stamp text-[13px] pointer-events-none">'26 10 24</div>
-                <button onclick="switchCouplePose()" class="absolute bottom-3 left-3 glass text-cream font-mono text-[11px] px-3 py-1.5 rounded-full border border-gold/30 flex items-center gap-1.5 transition cursor-pointer hover:border-gold">
-                    &#128260; Pose (<span id="pose-index">1</span>/4)
+                
+                <!-- Side arrow navigation buttons on photo -->
+                <button onclick="prevCouplePose()" aria-label="Foto Sebelumnya" class="absolute left-2.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full glass text-cream flex items-center justify-center border border-gold/40 hover:border-gold active:scale-95 transition cursor-pointer shadow-lg z-10 text-base">
+                    &#10094;
+                </button>
+                <button onclick="nextCouplePose()" aria-label="Foto Selanjutnya" class="absolute right-2.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full glass text-cream flex items-center justify-center border border-gold/40 hover:border-gold active:scale-95 transition cursor-pointer shadow-lg z-10 text-base">
+                    &#10095;
+                </button>
+            </div>
+
+            <!-- Clear next photo control bar below image -->
+            <div class="mt-3 flex items-center justify-between gap-2 p-2 rounded-xl bg-current/5 border border-current/15">
+                <button onclick="prevCouplePose()" class="flex items-center gap-1 font-mono text-xs px-3 py-1.5 rounded-lg border border-current/25 hover:border-gold transition cursor-pointer active:scale-95">
+                    &#10094; Prev
+                </button>
+                <div class="flex items-center gap-1.5">
+                    <button onclick="goToCouplePose(0)" id="pose-dot-0" aria-label="Foto 1" class="w-2.5 h-2.5 rounded-full bg-gold shadow-[0_0_6px_#C99E5A] cursor-pointer transition scale-125"></button>
+                    <button onclick="goToCouplePose(1)" id="pose-dot-1" aria-label="Foto 2" class="w-2.5 h-2.5 rounded-full bg-current/30 hover:bg-current/60 cursor-pointer transition"></button>
+                    <button onclick="goToCouplePose(2)" id="pose-dot-2" aria-label="Foto 3" class="w-2.5 h-2.5 rounded-full bg-current/30 hover:bg-current/60 cursor-pointer transition"></button>
+                    <button onclick="goToCouplePose(3)" id="pose-dot-3" aria-label="Foto 4" class="w-2.5 h-2.5 rounded-full bg-current/30 hover:bg-current/60 cursor-pointer transition"></button>
+                    <span class="font-mono text-[11px] opacity-70 ml-1">(<span id="pose-index">1</span>/4)</span>
+                </div>
+                <button onclick="nextCouplePose()" class="flex items-center gap-1.5 font-mono text-xs font-bold text-white px-3.5 py-1.5 rounded-lg transition cursor-pointer active:scale-95" style="background:linear-gradient(135deg,#B84A39 0%,#8a2020 100%);box-shadow:0 2px 10px rgba(184,74,57,.35)">
+                    <span>Next Foto</span> &#10095;
                 </button>
             </div>
             <div class="text-center mt-4 px-2">
@@ -341,7 +369,7 @@
         <div class="border-t-2 border-dashed border-current/20 mx-4"></div>
 
         <!-- FRAME 04: COUNTDOWN + VENUE (FR-06) -->
-        <div class="px-5 pt-5 pb-6">
+        <div id="frame-event" class="px-5 pt-5 pb-6 scroll-mt-20">
             <div class="text-[10px] font-mono opacity-50 mb-4 flex justify-between"><span>FRAME 04 // DATE &amp; VENUE</span><span>24.10.2026 &#9650;</span></div>
             <p class="font-mono text-[10px] text-center uppercase tracking-widest opacity-60 mb-3">&#9201; Menghitung hari menuju</p>
             <div class="grid grid-cols-4 gap-2 text-center mb-5">
@@ -382,117 +410,265 @@
                 <span class="opacity-50">&#9733; SOUVENIR STRIP</span>
             </div>
             <div class="rounded-2xl overflow-hidden text-cream" style="background:linear-gradient(175deg,#1a1815 0%,#111009 100%);border:2px solid rgba(201,158,90,.45)">
-                <div class="text-center p-4 pb-0">
+                <div class="text-center p-4 pb-2">
                     <span class="inline-block font-mono text-[10px] uppercase font-bold text-charcoal px-3 py-1 rounded-full" style="background:linear-gradient(135deg,#C99E5A,#a07830)">&#9733; Fitur Spesial Tamu</span>
                     <h3 class="font-serif text-xl font-bold mt-2 text-gold">Selfie &amp; Cetak Strip Fotoboxmu!</h3>
-                    <p class="text-[12px] text-zinc-400 mt-1 leading-relaxed px-2">Gunakan kamera HP-mu untuk ambil 3 pose foto, tambahkan filter &amp; stiker, lalu unduh hasilnya lengkap dengan nama pengantin, tanggal &amp; lokasi acara.</p>
+                    <p class="text-[12px] text-zinc-400 mt-1 leading-relaxed px-2">Pilih ukuran grid foto strip, rekam video Boomerang seru, atau ambil foto langsung dari HP-mu.</p>
                 </div>
 
-                <div class="p-4 space-y-3">
-
-                    <!-- STEP 1: CAMERA (FR-07, FR-08, FR-09) -->
-                    <div class="rounded-xl p-3 border border-zinc-700/60" style="background:#0d0c0a">
-                        <div class="flex items-center justify-between mb-2.5">
-                            <span class="font-mono text-[11px] text-gold font-bold">1. AMBIL 3 POSE FOTO</span>
-                            <span id="camera-slot-indicator" class="font-mono text-[10px] px-2 py-0.5 rounded text-emerald-400" style="background:#052010">Slot: Pose #1</span>
-                        </div>
-                        <div class="relative w-full rounded-xl overflow-hidden border border-zinc-700 mb-3 flex items-center justify-center" style="aspect-ratio:4/3;background:#050505">
-                            <video id="guest-camera-video" autoplay playsinline muted class="hidden absolute inset-0 w-full h-full object-cover" style="transform:scaleX(-1)"></video>
-                            <div id="camera-off-placeholder" class="text-center p-5">
-                                <div class="text-5xl mb-3">&#128247;</div>
-                                <p class="font-mono text-[11px] text-zinc-400 mb-3 leading-relaxed">Nyalakan kamera HP-mu atau pilih foto dari galeri untuk mengisi 3 frame photostrip.</p>
-                                <button onclick="startGuestCamera()" class="font-mono text-xs font-bold text-white px-5 py-2.5 rounded-xl transition cursor-pointer active:scale-95" style="background:linear-gradient(135deg,#B84A39,#8a2020)">&#127909; Aktifkan Kamera HP</button>
-                            </div>
-                            <div id="guest-booth-countdown" class="hidden absolute inset-0 z-20 flex flex-col items-center justify-center" style="background:rgba(0,0,0,.82);backdrop-filter:blur(6px)">
-                                <p id="guest-booth-pose-label" class="font-mono text-[11px] text-gold uppercase tracking-widest mb-1">SIAP POSE #1</p>
-                                <span id="guest-booth-cd-num" class="font-mono font-black text-white cd-pop" style="font-size:5rem;line-height:1;text-shadow:0 0 20px white">3</span>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-4 gap-2">
-                            <button onclick="startAuto3PoseBooth()" class="col-span-2 flex items-center justify-center gap-1.5 font-mono text-xs font-bold text-white py-2.5 px-3 rounded-xl transition cursor-pointer active:scale-95" style="background:linear-gradient(135deg,#B84A39,#8a2020)">&#9889; Auto 3-Pose</button>
-                            <button onclick="captureSinglePose()" class="flex items-center justify-center gap-1 font-mono text-[11px] text-cream py-2 px-2 rounded-xl border border-zinc-600 transition cursor-pointer hover:border-gold" style="background:#1a1815">&#128248; Jepret</button>
-                            <button onclick="switchCameraFacing()" class="flex items-center justify-center gap-1 font-mono text-[11px] text-cream py-2 px-2 rounded-xl border border-zinc-600 transition cursor-pointer hover:border-gold" style="background:#1a1815">&#128260; Balik</button>
-                        </div>
-                        <div class="mt-3 pt-2.5 border-t border-zinc-800 flex flex-wrap items-center justify-between gap-2">
-                            <div class="flex items-center gap-1.5">
-                                <span class="font-mono text-[10px] text-zinc-500">Slot:</span>
-                                <button onclick="selectPoseSlot(0)" id="slot-btn-0" class="slot-btn active">Pose 1</button>
-                                <button onclick="selectPoseSlot(1)" id="slot-btn-1" class="slot-btn">Pose 2</button>
-                                <button onclick="selectPoseSlot(2)" id="slot-btn-2" class="slot-btn">Pose 3</button>
-                            </div>
-                            <label class="cursor-pointer flex items-center gap-1.5 font-mono text-[11px] px-3 py-1.5 rounded-xl border border-gold/30 text-gold transition hover:border-gold" style="background:#1a1815">
-                                &#128444; Galeri HP
-                                <input type="file" id="gallery-upload-input" accept="image/*" class="hidden" onchange="handleGalleryUpload(event)">
-                            </label>
-                        </div>
+                <!-- MODE SELECTOR: FOTO STRIP vs BOOMERANG -->
+                <div class="px-4 pb-2">
+                    <div class="grid grid-cols-2 gap-2 p-1 rounded-xl bg-black/60 border border-zinc-800">
+                        <button onclick="switchStudioMode('strip')" id="mode-btn-strip" class="studio-mode-btn active flex items-center justify-center gap-1.5 py-2.5 px-2 rounded-lg font-mono text-xs cursor-pointer">
+                            <span>📸</span><span>Cetak Foto Strip</span>
+                        </button>
+                        <button onclick="switchStudioMode('boomerang')" id="mode-btn-boomerang" class="studio-mode-btn flex items-center justify-center gap-1.5 py-2.5 px-2 rounded-lg font-mono text-xs cursor-pointer">
+                            <span>🎬</span><span>Boomerang Studio</span>
+                        </button>
                     </div>
+                </div>
 
-                    <!-- STEP 2: CUSTOMIZE (FR-10, FR-11, FR-12) -->
-                    <div class="rounded-xl p-3 border border-zinc-700/60 space-y-3" style="background:#0d0c0a">
-                        <span class="font-mono text-[11px] text-gold font-bold block">2. EDIT FILTER, BINGKAI &amp; STIKER</span>
-                        <div>
-                            <p class="font-mono text-[10px] text-zinc-500 mb-1.5">Filter Foto:</p>
-                            <div class="flex flex-wrap gap-1.5">
-                                <button onclick="setGuestFilter('none')"   id="gf-none"  class="gfilter-btn active">Normal</button>
-                                <button onclick="setGuestFilter('warm')"   id="gf-warm"  class="gfilter-btn">Warm</button>
-                                <button onclick="setGuestFilter('bw')"     id="gf-bw"    class="gfilter-btn">B&amp;W</button>
-                                <button onclick="setGuestFilter('sepia')"  id="gf-sepia" class="gfilter-btn">Sepia 90s</button>
-                                <button onclick="setGuestFilter('rose')"   id="gf-rose"  class="gfilter-btn">Soft Rose</button>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between pt-2 border-t border-zinc-800">
-                            <span class="font-mono text-[10px] text-zinc-500">Warna Kertas:</span>
-                            <div class="flex gap-2">
-                                <button onclick="setGuestPaper('#FCFBF7','#1F1D1A','#B84A39')" title="Ivory"     class="w-7 h-7 rounded-full border-2 border-gold cursor-pointer hover:scale-110 transition" style="background:#FCFBF7"></button>
-                                <button onclick="setGuestPaper('#18181B','#F6F1E7','#C99E5A')" title="Midnight"  class="w-7 h-7 rounded-full border-2 border-zinc-500 cursor-pointer hover:scale-110 transition" style="background:#18181B"></button>
-                                <button onclick="setGuestPaper('#F5E1E5','#2D1E20','#9E3B4B')" title="Rose"      class="w-7 h-7 rounded-full border-2 border-zinc-400 cursor-pointer hover:scale-110 transition" style="background:#F5E1E5"></button>
-                                <button onclick="setGuestPaper('#DDE5D9','#1E281D','#4A6B4E')" title="Sage"      class="w-7 h-7 rounded-full border-2 border-zinc-400 cursor-pointer hover:scale-110 transition" style="background:#DDE5D9"></button>
-                                <button onclick="setGuestPaper('#7A2820','#FCFBF7','#E6C270')" title="Terracotta" class="w-7 h-7 rounded-full border-2 border-zinc-400 cursor-pointer hover:scale-110 transition" style="background:#7A2820"></button>
-                            </div>
-                        </div>
-                        <div class="pt-2 border-t border-zinc-800">
+                <div class="p-4 pt-1 space-y-3">
+
+                    <!-- ==================== CONTAINER 1: FOTO STRIP MODE ==================== -->
+                    <div id="studio-strip-mode" class="space-y-3">
+
+                        <!-- FORMAT / GRID SELECTOR (Berapa kali berapa foto strip yang mau dicetak) -->
+                        <div class="rounded-xl p-3 border border-zinc-700/60" style="background:#0d0c0a">
                             <div class="flex items-center justify-between mb-2">
-                                <span class="font-mono text-[10px] text-zinc-500">Stiker (sentuh &amp; geser):</span>
-                                <div class="flex gap-1">
-                                    <button onclick="resizeSticker(1.15)" class="font-mono text-[10px] px-2 py-0.5 rounded border border-zinc-700 cursor-pointer text-cream hover:border-gold" style="background:#1a1815">&#10133;</button>
-                                    <button onclick="resizeSticker(0.85)" class="font-mono text-[10px] px-2 py-0.5 rounded border border-zinc-700 cursor-pointer text-cream hover:border-gold" style="background:#1a1815">&#10134;</button>
-                                    <button onclick="deleteSticker()" class="font-mono text-[10px] px-2 py-0.5 rounded border border-red-800 cursor-pointer text-red-300 hover:bg-red-900" style="background:#1a0808">&#128465;</button>
+                                <span class="font-mono text-[11px] text-gold font-bold">📐 PILIH FORMAT &amp; UKURAN GRID:</span>
+                                <span id="layout-badge" class="font-mono text-[10px] px-2 py-0.5 rounded text-amber-300 bg-amber-950/60 font-bold border border-amber-800/40">1 × 3 (3 Pose)</span>
+                            </div>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                <button onclick="setStripLayout('1x3')" id="btn-layout-1x3" class="layout-btn active flex flex-col items-center justify-center p-2 rounded-xl border transition cursor-pointer text-center">
+                                    <span class="font-mono font-bold text-xs text-cream">1 × 3</span>
+                                    <span class="text-[9px] text-zinc-400 font-mono">Strip Klasik (3 Foto)</span>
+                                </button>
+                                <button onclick="setStripLayout('1x4')" id="btn-layout-1x4" class="layout-btn flex flex-col items-center justify-center p-2 rounded-xl border transition cursor-pointer text-center">
+                                    <span class="font-mono font-bold text-xs text-cream">1 × 4</span>
+                                    <span class="text-[9px] text-zinc-400 font-mono">Strip Panjang (4 Foto)</span>
+                                </button>
+                                <button onclick="setStripLayout('2x2')" id="btn-layout-2x2" class="layout-btn flex flex-col items-center justify-center p-2 rounded-xl border transition cursor-pointer text-center">
+                                    <span class="font-mono font-bold text-xs text-cream">2 × 2</span>
+                                    <span class="text-[9px] text-zinc-400 font-mono">Kotak Grid (4 Foto)</span>
+                                </button>
+                                <button onclick="setStripLayout('2x3')" id="btn-layout-2x3" class="layout-btn flex flex-col items-center justify-center p-2 rounded-xl border transition cursor-pointer text-center">
+                                    <span class="font-mono font-bold text-xs text-cream">2 × 3</span>
+                                    <span class="text-[9px] text-zinc-400 font-mono">Mini Album (6 Foto)</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- STEP 1: CAMERA (FR-07, FR-08, FR-09) -->
+                        <div class="rounded-xl p-3 border border-zinc-700/60" style="background:#0d0c0a">
+                            <div class="flex items-center justify-between mb-2.5">
+                                <span class="font-mono text-[11px] text-gold font-bold">1. AMBIL POSE FOTO</span>
+                                <span id="camera-slot-indicator" class="font-mono text-[10px] px-2 py-0.5 rounded text-emerald-400" style="background:#052010">Slot: Pose #1</span>
+                            </div>
+                            <div class="relative w-full rounded-xl overflow-hidden border border-zinc-700 mb-3 flex items-center justify-center" style="aspect-ratio:4/3;background:#050505">
+                                <video id="guest-camera-video" autoplay playsinline muted class="hidden absolute inset-0 w-full h-full object-cover" style="transform:scaleX(-1)"></video>
+                                <div id="camera-off-placeholder" class="text-center p-5">
+                                    <div class="text-5xl mb-3">&#128247;</div>
+                                    <p class="font-mono text-[11px] text-zinc-400 mb-3 leading-relaxed">Nyalakan kamera HP-mu atau pilih foto dari galeri untuk mengisi frame photostrip.</p>
+                                    <button onclick="startGuestCamera()" class="font-mono text-xs font-bold text-white px-5 py-2.5 rounded-xl transition cursor-pointer active:scale-95" style="background:linear-gradient(135deg,#B84A39,#8a2020)">&#127909; Aktifkan Kamera HP</button>
+                                </div>
+                                <div id="guest-booth-countdown" class="hidden absolute inset-0 z-20 flex flex-col items-center justify-center" style="background:rgba(0,0,0,.82);backdrop-filter:blur(6px)">
+                                    <p id="guest-booth-pose-label" class="font-mono text-[11px] text-gold uppercase tracking-widest mb-1">SIAP POSE #1</p>
+                                    <span id="guest-booth-cd-num" class="font-mono font-black text-white cd-pop" style="font-size:5rem;line-height:1;text-shadow:0 0 20px white">3</span>
                                 </div>
                             </div>
-                            <div class="flex flex-wrap gap-1.5">
-                                <button onclick="addSticker('&#10084;&#65039;')" class="sticker-btn">&#10084;&#65039;</button>
-                                <button onclick="addSticker('&#10024;')" class="sticker-btn">&#10024;</button>
-                                <button onclick="addSticker('&#127800;')" class="sticker-btn">&#127800;</button>
-                                <button onclick="addSticker('&#127872;')" class="sticker-btn">&#127872;</button>
-                                <button onclick="addSticker('&#128374;&#65039;')" class="sticker-btn">&#128374;&#65039;</button>
-                                <button onclick="addSticker('&#128081;')" class="sticker-btn">&#128081;</button>
-                                <button onclick="addSticker('&#127866;')" class="sticker-btn">&#127866;</button>
-                                <button onclick="addSticker('&#128141;')" class="sticker-btn">&#128141;</button>
-                                <button onclick="addSticker('Just Married')" class="font-hand text-xs text-gold border border-gold/40 px-2.5 py-1 rounded-lg cursor-pointer hover:bg-zinc-800 transition" style="background:#1a1815">Just Married</button>
-                                <button onclick="addSticker('Team Pengantin')" class="font-mono text-[10px] text-cream border border-zinc-600 px-2.5 py-1 rounded-lg cursor-pointer hover:border-gold transition" style="background:#1a1815">Team Pengantin</button>
+                            <div class="grid grid-cols-4 gap-2">
+                                <button onclick="startAutoPoseBooth()" class="col-span-2 flex items-center justify-center gap-1.5 font-mono text-xs font-bold text-white py-2.5 px-2 rounded-xl transition cursor-pointer active:scale-95" style="background:linear-gradient(135deg,#B84A39,#8a2020)">
+                                    <span id="auto-capture-label">&#9889; Auto 3-Pose</span>
+                                </button>
+                                <button onclick="captureSinglePose()" class="flex items-center justify-center gap-1 font-mono text-[11px] text-cream py-2 px-1 rounded-xl border border-zinc-600 transition cursor-pointer hover:border-gold" style="background:#1a1815">&#128248; Jepret</button>
+                                <button onclick="switchCameraFacing()" class="flex items-center justify-center gap-1 font-mono text-[11px] text-cream py-2 px-1 rounded-xl border border-zinc-600 transition cursor-pointer hover:border-gold" style="background:#1a1815">&#128260; Balik</button>
+                            </div>
+                            <div class="mt-3 pt-2.5 border-t border-zinc-800 flex flex-wrap items-center justify-between gap-2">
+                                <div class="flex items-center gap-1.5 flex-wrap">
+                                    <span class="font-mono text-[10px] text-zinc-500">Slot:</span>
+                                    <div id="pose-slot-container" class="flex flex-wrap items-center gap-1.5">
+                                        <button onclick="selectPoseSlot(0)" id="slot-btn-0" class="slot-btn active">Pose 1</button>
+                                        <button onclick="selectPoseSlot(1)" id="slot-btn-1" class="slot-btn">Pose 2</button>
+                                        <button onclick="selectPoseSlot(2)" id="slot-btn-2" class="slot-btn">Pose 3</button>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-1.5">
+                                    <button onclick="switchStudioMode('boomerang')" class="flex items-center gap-1 font-mono text-[11px] px-2.5 py-1.5 rounded-xl border border-amber-600/40 text-amber-300 hover:border-amber-400 transition" style="background:#1a1508">
+                                        &#127916; Boomerang
+                                    </button>
+                                    <label class="cursor-pointer flex items-center gap-1.5 font-mono text-[11px] px-3 py-1.5 rounded-xl border border-gold/30 text-gold transition hover:border-gold" style="background:#1a1815">
+                                        &#128444; Galeri HP
+                                        <input type="file" id="gallery-upload-input" accept="image/*" class="hidden" onchange="handleGalleryUpload(event)">
+                                    </label>
+                                </div>
                             </div>
                         </div>
-                        <div class="pt-2 border-t border-zinc-800">
-                            <label class="font-mono text-[10px] text-zinc-500 block mb-1.5">Nama / Catatan Tamu di Strip:</label>
-                            <input type="text" id="guest-strip-caption" oninput="renderCanvas()" placeholder="Contoh: Sahabat &amp; Keluarga" class="w-full rounded-xl px-3 py-2 text-[12px] text-cream focus:outline-none transition" style="background:#1a1815;border:1px solid #3a3530">
-                        </div>
-                    </div>
 
-                    <!-- STEP 3: PREVIEW + DOWNLOAD (FR-13, FR-14) -->
-                    <div class="rounded-xl p-3 border border-zinc-700/60" style="background:#0d0c0a">
-                        <div class="flex items-center justify-between mb-2.5">
-                            <span class="font-mono text-[11px] text-gold font-bold">3. PRATINJAU &amp; UNDUH</span>
-                            <span class="font-mono text-[10px] text-zinc-500">Geser stiker &#8597;</span>
+                        <!-- STEP 2: CUSTOMIZE (FR-10, FR-11, FR-12) -->
+                        <div class="rounded-xl p-3 border border-zinc-700/60 space-y-3" style="background:#0d0c0a">
+                            <span class="font-mono text-[11px] text-gold font-bold block">2. EDIT FILTER, BINGKAI &amp; STIKER</span>
+                            <div>
+                                <p class="font-mono text-[10px] text-zinc-500 mb-1.5">Filter Foto:</p>
+                                <div class="flex flex-wrap gap-1.5">
+                                    <button onclick="setGuestFilter('none')"   id="gf-none"  class="gfilter-btn active">Normal</button>
+                                    <button onclick="setGuestFilter('warm')"   id="gf-warm"  class="gfilter-btn">Warm</button>
+                                    <button onclick="setGuestFilter('bw')"     id="gf-bw"    class="gfilter-btn">B&amp;W</button>
+                                    <button onclick="setGuestFilter('sepia')"  id="gf-sepia" class="gfilter-btn">Sepia 90s</button>
+                                    <button onclick="setGuestFilter('rose')"   id="gf-rose"  class="gfilter-btn">Soft Rose</button>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between pt-2 border-t border-zinc-800">
+                                <span class="font-mono text-[10px] text-zinc-500">Warna Kertas:</span>
+                                <div class="flex gap-2">
+                                    <button onclick="setGuestPaper('#FCFBF7','#1F1D1A','#B84A39')" title="Ivory"     class="w-7 h-7 rounded-full border-2 border-gold cursor-pointer hover:scale-110 transition" style="background:#FCFBF7"></button>
+                                    <button onclick="setGuestPaper('#18181B','#F6F1E7','#C99E5A')" title="Midnight"  class="w-7 h-7 rounded-full border-2 border-zinc-500 cursor-pointer hover:scale-110 transition" style="background:#18181B"></button>
+                                    <button onclick="setGuestPaper('#F5E1E5','#2D1E20','#9E3B4B')" title="Rose"      class="w-7 h-7 rounded-full border-2 border-zinc-400 cursor-pointer hover:scale-110 transition" style="background:#F5E1E5"></button>
+                                    <button onclick="setGuestPaper('#DDE5D9','#1E281D','#4A6B4E')" title="Sage"      class="w-7 h-7 rounded-full border-2 border-zinc-400 cursor-pointer hover:scale-110 transition" style="background:#DDE5D9"></button>
+                                    <button onclick="setGuestPaper('#7A2820','#FCFBF7','#E6C270')" title="Terracotta" class="w-7 h-7 rounded-full border-2 border-zinc-400 cursor-pointer hover:scale-110 transition" style="background:#7A2820"></button>
+                                </div>
+                            </div>
+                            <div class="pt-2 border-t border-zinc-800">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="font-mono text-[10px] text-zinc-500">Stiker (sentuh &amp; geser):</span>
+                                    <div class="flex gap-1">
+                                        <button onclick="resizeSticker(1.15)" class="font-mono text-[10px] px-2 py-0.5 rounded border border-zinc-700 cursor-pointer text-cream hover:border-gold" style="background:#1a1815">&#10133;</button>
+                                        <button onclick="resizeSticker(0.85)" class="font-mono text-[10px] px-2 py-0.5 rounded border border-zinc-700 cursor-pointer text-cream hover:border-gold" style="background:#1a1815">&#10134;</button>
+                                        <button onclick="deleteSticker()" class="font-mono text-[10px] px-2 py-0.5 rounded border border-red-800 cursor-pointer text-red-300 hover:bg-red-900" style="background:#1a0808">&#128465;</button>
+                                    </div>
+                                </div>
+                                <div class="flex flex-wrap gap-1.5">
+                                    <button onclick="addSticker('&#10084;&#65039;')" class="sticker-btn">&#10084;&#65039;</button>
+                                    <button onclick="addSticker('&#10024;')" class="sticker-btn">&#10024;</button>
+                                    <button onclick="addSticker('&#127800;')" class="sticker-btn">&#127800;</button>
+                                    <button onclick="addSticker('&#127872;')" class="sticker-btn">&#127872;</button>
+                                    <button onclick="addSticker('&#128374;&#65039;')" class="sticker-btn">&#128374;&#65039;</button>
+                                    <button onclick="addSticker('&#128081;')" class="sticker-btn">&#128081;</button>
+                                    <button onclick="addSticker('&#127866;')" class="sticker-btn">&#127866;</button>
+                                    <button onclick="addSticker('&#128141;')" class="sticker-btn">&#128141;</button>
+                                    <button onclick="addSticker('Just Married')" class="font-hand text-xs text-gold border border-gold/40 px-2.5 py-1 rounded-lg cursor-pointer hover:bg-zinc-800 transition" style="background:#1a1815">Just Married</button>
+                                    <button onclick="addSticker('Team Pengantin')" class="font-mono text-[10px] text-cream border border-zinc-600 px-2.5 py-1 rounded-lg cursor-pointer hover:border-gold transition" style="background:#1a1815">Team Pengantin</button>
+                                </div>
+                            </div>
+                            <div class="pt-2 border-t border-zinc-800">
+                                <label class="font-mono text-[10px] text-zinc-500 block mb-1.5">Nama / Catatan Tamu di Strip:</label>
+                                <input type="text" id="guest-strip-caption" oninput="renderCanvas()" placeholder="Contoh: Sahabat &amp; Keluarga" class="w-full rounded-xl px-3 py-2 text-[12px] text-cream focus:outline-none transition" style="background:#1a1815;border:1px solid #3a3530">
+                            </div>
                         </div>
-                        <div class="flex justify-center my-2">
-                            <canvas id="guest-strip-canvas" width="600" height="1620" class="rounded-xl border border-zinc-700" style="width:100%;max-width:270px;box-shadow:0 12px 40px rgba(0,0,0,.9)"></canvas>
+
+                        <!-- STEP 3: PREVIEW + DOWNLOAD (FR-13, FR-14) -->
+                        <div class="rounded-xl p-3 border border-zinc-700/60" style="background:#0d0c0a">
+                            <div class="flex items-center justify-between mb-2.5">
+                                <span class="font-mono text-[11px] text-gold font-bold">3. PRATINJAU &amp; UNDUH</span>
+                                <span class="font-mono text-[10px] text-zinc-500">Geser stiker &#8597;</span>
+                            </div>
+                            <div class="flex justify-center my-2 overflow-x-auto">
+                                <canvas id="guest-strip-canvas" width="600" height="1620" class="rounded-xl border border-zinc-700" style="width:100%;max-width:280px;box-shadow:0 12px 40px rgba(0,0,0,.9)"></canvas>
+                            </div>
+                            <p class="font-mono text-[10px] text-zinc-500 text-center mb-3">Footer: <strong class="text-zinc-300">Rama &amp; Sinta &middot; 24 Okt 2026 &middot; Glass House, Dharmawangsa</strong></p>
+                            <div class="flex flex-col gap-2">
+                                <button onclick="downloadStrip()" class="w-full flex items-center justify-center gap-2 font-mono text-xs font-bold text-charcoal py-3 rounded-xl transition cursor-pointer active:scale-95" style="background:linear-gradient(135deg,#C99E5A 0%,#e8b96a 50%,#C99E5A 100%);box-shadow:0 6px 20px rgba(201,158,90,.35)">&#11015;&#65039; Unduh Strip Fotobox (.PNG)</button>
+                                <a href="#rsvp-section" onclick="attachToRSVP()" class="w-full flex items-center justify-center gap-2 font-mono text-xs text-cream py-3 rounded-xl border border-gold/30 transition cursor-pointer hover:border-gold text-center" style="background:#1a1815">&#128204; Tempel ke Buku Tamu</a>
+                            </div>
                         </div>
-                        <p class="font-mono text-[10px] text-zinc-500 text-center mb-3">Footer: <strong class="text-zinc-300">Rama &amp; Sinta &middot; 24 Okt 2026 &middot; Glass House, Dharmawangsa</strong></p>
-                        <div class="flex flex-col gap-2">
-                            <button onclick="downloadStrip()" class="w-full flex items-center justify-center gap-2 font-mono text-xs font-bold text-charcoal py-3 rounded-xl transition cursor-pointer active:scale-95" style="background:linear-gradient(135deg,#C99E5A 0%,#e8b96a 50%,#C99E5A 100%);box-shadow:0 6px 20px rgba(201,158,90,.35)">&#11015;&#65039; Unduh Strip Fotobox (.PNG)</button>
-                            <a href="#rsvp-section" onclick="attachToRSVP()" class="w-full flex items-center justify-center gap-2 font-mono text-xs text-cream py-3 rounded-xl border border-gold/30 transition cursor-pointer hover:border-gold text-center" style="background:#1a1815">&#128204; Tempel ke Buku Tamu</a>
+
+                    </div><!-- end #studio-strip-mode -->
+
+
+                    <!-- ==================== CONTAINER 2: BOOMERANG STUDIO MODE ==================== -->
+                    <div id="studio-boomerang-mode" class="hidden space-y-3">
+                        <div class="rounded-xl p-3 border border-amber-600/40" style="background:#0e0c08">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="font-mono text-[11px] text-amber-300 font-bold flex items-center gap-1.5">
+                                    <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+                                    STUDIO BOOMERANG RETRO
+                                </span>
+                                <span class="font-mono text-[10px] text-zinc-400">Ping-Pong Loop</span>
+                            </div>
+                            <p class="text-[11px] text-zinc-400 mb-3 leading-relaxed">
+                                Rekam aksi bergerak singkat atau buat loop video seru dari pose fotomu yang berputar maju-mundur tanpa henti!
+                            </p>
+
+                            <!-- Boomerang Viewfinder / Capture Box -->
+                            <div class="relative w-full rounded-xl overflow-hidden border border-zinc-700 mb-3 flex items-center justify-center bg-black" style="aspect-ratio:1/1;max-width:320px;margin-left:auto;margin-right:auto">
+                                <video id="bm-camera-video" autoplay playsinline muted class="hidden absolute inset-0 w-full h-full object-cover" style="transform:scaleX(-1)"></video>
+                                <div id="bm-camera-placeholder" class="text-center p-4">
+                                    <div class="text-4xl mb-2">&#127916;</div>
+                                    <p class="font-mono text-[11px] text-zinc-400 mb-2.5">Siapkan gerakan seru (kedip mata, senyum, toss)!</p>
+                                    <button onclick="startGuestCamera()" class="font-mono text-xs font-bold text-white px-4 py-2 rounded-xl transition cursor-pointer" style="background:linear-gradient(135deg,#B84A39,#8a2020)">&#127909; Nyalakan Kamera</button>
+                                </div>
+                                <!-- Countdown / Recording overlay -->
+                                <div id="bm-record-overlay" class="hidden absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/80 backdrop-blur-sm">
+                                    <p id="bm-record-status" class="font-mono text-xs text-amber-300 uppercase tracking-widest mb-2 font-bold flex items-center gap-1.5">
+                                        <span class="w-2.5 h-2.5 rounded-full bg-red-500 rec-pulse"></span>
+                                        <span id="bm-status-text">SIAP MEREKAM...</span>
+                                    </p>
+                                    <span id="bm-cd-num" class="font-mono font-black text-white cd-pop text-6xl">3</span>
+                                    <div class="w-40 h-2 bg-zinc-800 rounded-full mt-4 overflow-hidden">
+                                        <div id="bm-progress-bar" class="h-full bg-amber-400 transition-all duration-100" style="width:0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Record Action Buttons -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-3">
+                                <button onclick="recordLiveBoomerang()" id="btn-record-bm" class="flex items-center justify-center gap-2 font-mono text-xs font-bold text-white py-3 px-3 rounded-xl transition cursor-pointer active:scale-95" style="background:linear-gradient(135deg,#B84A39 0%,#8a2020 100%);box-shadow:0 4px 15px rgba(184,74,57,.4)">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-red-400 rec-pulse"></span>
+                                    <span>Rekam Boomerang (Live)</span>
+                                </button>
+                                <button onclick="createBoomerangFromPhotos()" class="flex items-center justify-center gap-1.5 font-mono text-xs font-bold text-cream py-3 px-3 rounded-xl border border-amber-600/50 hover:border-amber-400 transition cursor-pointer active:scale-95" style="background:#1a1710">
+                                    <span>&#10024;</span><span>Buat dari Pose Strip</span>
+                                </button>
+                            </div>
+
+                            <!-- Boomerang Interactive Player (Ping-Pong Loop) -->
+                            <div id="boomerang-player-box" class="rounded-xl p-3 border border-zinc-800 bg-black/70 space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <span class="font-mono text-[10px] text-amber-300 font-bold uppercase tracking-wider">&#9658; PRATINJAU BOOMERANG LOOP</span>
+                                    <span id="bm-frame-info" class="font-mono text-[10px] text-zinc-400">Frame: 1 / 16</span>
+                                </div>
+
+                                <div class="relative flex justify-center overflow-hidden rounded-xl border-2 border-zinc-700 scanlines bg-zinc-950 mx-auto" style="max-width:300px;aspect-ratio:1/1">
+                                    <canvas id="boomerang-canvas" width="400" height="400" class="w-full h-full object-cover"></canvas>
+                                    <div class="absolute bottom-2 right-2.5 quartz-stamp text-[11px] pointer-events-none">'26 10 24</div>
+                                    <div class="absolute top-2 left-2.5 font-mono text-[9px] text-white/80 bg-black/60 px-2 py-0.5 rounded pointer-events-none">BOOMERANG 35MM</div>
+                                </div>
+
+                                <!-- Player Controls: Speed & Filter -->
+                                <div class="space-y-2 pt-2 border-t border-zinc-800">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center gap-1.5">
+                                            <span class="font-mono text-[10px] text-zinc-400">Speed:</span>
+                                            <button onclick="setBoomerangSpeed(0.6)" id="bms-slow" class="font-mono text-[10px] px-2 py-0.5 rounded border border-zinc-700 text-zinc-300 hover:border-gold cursor-pointer" style="background:#1a1815">0.6x</button>
+                                            <button onclick="setBoomerangSpeed(1.0)" id="bms-norm" class="font-mono text-[10px] px-2 py-0.5 rounded border border-gold text-gold font-bold cursor-pointer" style="background:#2a2010">1.0x</button>
+                                            <button onclick="setBoomerangSpeed(1.6)" id="bms-fast" class="font-mono text-[10px] px-2 py-0.5 rounded border border-zinc-700 text-zinc-300 hover:border-gold cursor-pointer" style="background:#1a1815">1.6x</button>
+                                        </div>
+                                        <button onclick="toggleBoomerangPlay()" id="btn-bm-play" class="flex items-center gap-1 font-mono text-[11px] px-3 py-1 rounded-lg border border-gold/40 text-gold hover:bg-gold/10 cursor-pointer">
+                                            <span id="bm-play-icon">&#10074;&#10074;</span> <span id="bm-play-text">Pause</span>
+                                        </button>
+                                    </div>
+                                    <div class="flex items-center gap-1.5 flex-wrap">
+                                        <span class="font-mono text-[10px] text-zinc-400">Filter:</span>
+                                        <button onclick="setBoomerangFilter('none')"  id="bmf-none"  class="gfilter-btn active">Normal</button>
+                                        <button onclick="setBoomerangFilter('warm')"  id="bmf-warm"  class="gfilter-btn">Warm</button>
+                                        <button onclick="setBoomerangFilter('bw')"    id="bmf-bw"    class="gfilter-btn">B&amp;W</button>
+                                        <button onclick="setBoomerangFilter('sepia')" id="bmf-sepia" class="gfilter-btn">Sepia</button>
+                                    </div>
+                                </div>
+
+                                <!-- Action Buttons -->
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+                                    <button onclick="downloadBoomerangVideo()" class="w-full flex items-center justify-center gap-1.5 font-mono text-xs font-bold text-charcoal py-2.5 rounded-xl transition cursor-pointer active:scale-95" style="background:linear-gradient(135deg,#C99E5A 0%,#e8b96a 100%)">
+                                        &#11015;&#65039; Unduh Video Boomerang
+                                    </button>
+                                    <button onclick="useBoomerangFrameForSlot()" class="w-full flex items-center justify-center gap-1.5 font-mono text-xs text-cream py-2.5 rounded-xl border border-zinc-600 hover:border-gold transition cursor-pointer active:scale-95" style="background:#1a1815">
+                                        &#128248; Pakai Frame ke Strip
+                                    </button>
+                                </div>
+                            </div>
+
                         </div>
-                    </div>
+                    </div><!-- end #studio-boomerang-mode -->
 
                 </div>
             </div>
@@ -657,47 +833,257 @@ function gotoMain(){
 /* === MAIN INVITATION CONTROLS FR-04, FR-05 === */
 const POSES=['https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=900&q=80','https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=900&q=80','https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=900&q=80','https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=900&q=80'];
 let poseIdx=0;
-function switchCouplePose(){flash();poseIdx=(poseIdx+1)%POSES.length;const img=document.getElementById('couple-pose-img');img.style.opacity='.3';img.src=POSES[poseIdx];img.onload=()=>{img.style.opacity='1'};document.getElementById('pose-index').textContent=poseIdx+1}
+
+function updateCouplePoseUI(){
+    const img=document.getElementById('couple-pose-img');
+    if(!img)return;
+    img.style.opacity='.25';
+    img.src=POSES[poseIdx];
+    img.onload=()=>{img.style.opacity='1'};
+    const idxEl=document.getElementById('pose-index');
+    if(idxEl)idxEl.textContent=poseIdx+1;
+    for(let i=0;i<POSES.length;i++){
+        const dot=document.getElementById(`pose-dot-${i}`);
+        if(dot){
+            if(i===poseIdx){
+                dot.className='w-2.5 h-2.5 rounded-full bg-gold shadow-[0_0_6px_#C99E5A] cursor-pointer transition scale-125';
+            }else{
+                dot.className='w-2.5 h-2.5 rounded-full bg-current/30 hover:bg-current/60 cursor-pointer transition';
+            }
+        }
+    }
+}
+function nextCouplePose(){
+    flash();
+    poseIdx=(poseIdx+1)%POSES.length;
+    updateCouplePoseUI();
+    playBeep(940,.06);
+}
+function prevCouplePose(){
+    flash();
+    poseIdx=(poseIdx-1+POSES.length)%POSES.length;
+    updateCouplePoseUI();
+    playBeep(860,.06);
+}
+function goToCouplePose(i){
+    if(i===poseIdx)return;
+    flash();
+    poseIdx=i;
+    updateCouplePoseUI();
+    playBeep(900,.06);
+}
+const switchCouplePose=nextCouplePose;
+
 const MF_IDS={''  :'mf-normal','filter-warm':'mf-warm','filter-bw':'mf-bw','filter-sepia':'mf-sepia','filter-90s':'mf-90s'};
 function setMainFilter(cls){document.querySelectorAll('.main-photo').forEach(img=>{img.classList.remove('filter-warm','filter-bw','filter-sepia','filter-90s');if(cls)img.classList.add(cls)});Object.values(MF_IDS).forEach(id=>document.getElementById(id)?.classList.remove('active'));document.getElementById(MF_IDS[cls])?.classList.add('active');playBeep(920,.06)}
 function setStripTheme(cls){const p=document.getElementById('photostrip-paper');['strip-ivory','strip-midnight','strip-pink','strip-sage'].forEach(c=>p.classList.remove(c));p.classList.add(cls);playBeep(840,.06)}
 
 /* === FLIP CLOCK COUNTDOWN FR-06 === */
 const TARGET=new Date('2026-10-24T08:00:00+07:00').getTime();
-function updateCD(){const diff=Math.max(0,TARGET-Date.now());const d=Math.floor(diff/86400000),h=Math.floor(diff%86400000/3600000),m=Math.floor(diff%3600000/60000),s=Math.floor(diff%60000/1000);[['cd-days',d],['cd-hours',h],['cd-mins',m],['cd-secs',s]].forEach(([id,v])=>{const el=document.getElementById(id);const val=String(v).padStart(2,'0');if(el.textContent!==val){el.classList.remove('flip-in');void el.offsetWidth;el.classList.add('flip-in');el.textContent=val}})}
+function updateCD(){const diff=Math.max(0,TARGET-Date.now());const d=Math.floor(diff/86400000),h=Math.floor(diff%86400000/3600000),m=Math.floor(diff%3600000/60000),s=Math.floor(diff%60000/1000);[['cd-days',d],['cd-hours',h],['cd-mins',m],['cd-secs',s]].forEach(([id,v])=>{const el=document.getElementById(id);if(!el)return;const val=String(v).padStart(2,'0');if(el.textContent!==val){el.classList.remove('flip-in');void el.offsetWidth;el.classList.add('flip-in');el.textContent=val}})}
 setInterval(updateCD,1000);updateCD();
 
+/* === PHOTOSTRIP LAYOUT CONFIGURATIONS (Berapa kali berapa foto strip) === */
+const LAYOUT_CONFIGS={
+    '1x3':{cols:1,rows:3,total:3,label:'1 × 3 (3 Pose)',canvasW:600,canvasH:1620},
+    '1x4':{cols:1,rows:4,total:4,label:'1 × 4 (4 Pose)',canvasW:600,canvasH:1980},
+    '2x2':{cols:2,rows:2,total:4,label:'2 × 2 (Kotak)', canvasW:600,canvasH:920},
+    '2x3':{cols:2,rows:3,total:6,label:'2 × 3 (Grid 6)',canvasW:600,canvasH:1180}
+};
+let stripLayout='1x3';
+
+function setStripLayout(layoutKey){
+    if(!LAYOUT_CONFIGS[layoutKey])return;
+    stripLayout=layoutKey;
+    const cfg=LAYOUT_CONFIGS[layoutKey];
+    ['1x3','1x4','2x2','2x3'].forEach(k=>{
+        document.getElementById(`btn-layout-${k}`)?.classList.toggle('active',k===layoutKey);
+    });
+    const badge=document.getElementById('layout-badge');
+    if(badge)badge.textContent=cfg.label;
+    const autoLbl=document.getElementById('auto-capture-label');
+    if(autoLbl)autoLbl.textContent=`⚡ Auto ${cfg.total}-Pose`;
+    
+    updateSlotButtons();
+    if(activePose>=cfg.total)selectPoseSlot(0);
+    renderCanvas();
+    playBeep(920,.06);
+    showToast(`📐 Format diubah ke ${cfg.label}!`);
+}
+
+function updateSlotButtons(){
+    const cont=document.getElementById('pose-slot-container');
+    if(!cont)return;
+    const total=LAYOUT_CONFIGS[stripLayout].total;
+    cont.innerHTML='';
+    for(let i=0;i<total;i++){
+        const btn=document.createElement('button');
+        btn.id=`slot-btn-${i}`;
+        btn.className=`slot-btn ${i===activePose?'active':''}`;
+        btn.textContent=`Pose ${i+1}`;
+        btn.onclick=()=>selectPoseSlot(i);
+        cont.appendChild(btn);
+    }
+}
+
 /* === GUEST CAMERA FR-07, FR-08, FR-09 === */
-async function startGuestCamera(){const v=document.getElementById('guest-camera-video'),ph=document.getElementById('camera-off-placeholder');if(guestStream)guestStream.getTracks().forEach(t=>t.stop());try{guestStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:currentFacing,width:{ideal:1280},height:{ideal:960}},audio:false});v.srcObject=guestStream;v.style.transform=currentFacing==='user'?'scaleX(-1)':'scaleX(1)';v.classList.remove('hidden');ph.classList.add('hidden');showToast('📸 Kamera aktif! Pilih pose dan jepret.')}catch(e){showToast('⚠️ Kamera tidak dapat diakses. Gunakan 🖼️ Galeri HP.')}}
-function switchCameraFacing(){currentFacing=currentFacing==='user'?'environment':'user';if(guestStream)startGuestCamera();playBeep(880,.06)}
-function selectPoseSlot(i){activePose=i;document.getElementById('camera-slot-indicator').textContent=`Slot: Pose #${i+1}`;[0,1,2].forEach(j=>document.getElementById(`slot-btn-${j}`).classList.toggle('active',i===j))}
-function captureSlot(slot){const v=document.getElementById('guest-camera-video');if(!guestStream||v.classList.contains('hidden')){showToast('⚠️ Aktifkan kamera terlebih dahulu!');return false}flash();const tmp=document.createElement('canvas');tmp.width=800;tmp.height=600;const cx=tmp.getContext('2d');const vw=v.videoWidth||640,vh=v.videoHeight||480;let sx=0,sy=0,sw=vw,sh=vh;const r=4/3;if(vw/vh>r){sw=vh*r;sx=(vw-sw)/2}else{sh=vw/r;sy=(vh-sh)/2}cx.save();if(currentFacing==='user'){cx.translate(tmp.width,0);cx.scale(-1,1)}cx.drawImage(v,sx,sy,sw,sh,0,0,800,600);cx.restore();const img=new Image();img.onload=()=>{guestImages[slot]=img;renderCanvas()};img.src=tmp.toDataURL('image/jpeg',.92);return true}
-function captureSinglePose(){if(captureSlot(activePose)){showToast(`✅ Pose #${activePose+1} berhasil dijepret!`);selectPoseSlot((activePose+1)%3)}}
-async function startAuto3PoseBooth(){if(!guestStream){await startGuestCamera();if(!guestStream)return;await new Promise(r=>setTimeout(r,400))}const box=document.getElementById('guest-booth-countdown'),lbl=document.getElementById('guest-booth-pose-label'),num=document.getElementById('guest-booth-cd-num');box.classList.remove('hidden');for(let p=0;p<3;p++){selectPoseSlot(p);lbl.textContent=`🎯 SIAP POSE #${p+1}`;for(let c=3;c>=1;c--){num.textContent=c;num.classList.remove('cd-pop');void num.offsetWidth;num.classList.add('cd-pop');playBeep(760+(3-c)*60,.12);await new Promise(r=>setTimeout(r,900))}num.textContent='📸';captureSlot(p);await new Promise(r=>setTimeout(r,700))}box.classList.add('hidden');showToast('🎉 3 Pose selesai! Edit filter & stiker, lalu unduh.')}
-function handleGalleryUpload(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{const img=new Image();img.onload=()=>{guestImages[activePose]=img;renderCanvas();showToast(`🖼️ Foto masuk ke Pose #${activePose+1}!`);selectPoseSlot((activePose+1)%3)};img.src=ev.target.result};r.readAsDataURL(f);e.target.value=''}
+async function startGuestCamera(){
+    const v=document.getElementById('guest-camera-video'),ph=document.getElementById('camera-off-placeholder');
+    if(guestStream)guestStream.getTracks().forEach(t=>t.stop());
+    try{
+        guestStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:currentFacing,width:{ideal:1280},height:{ideal:960}},audio:false});
+        v.srcObject=guestStream;
+        v.style.transform=currentFacing==='user'?'scaleX(-1)':'scaleX(1)';
+        v.classList.remove('hidden');
+        ph.classList.add('hidden');
+        syncCameraToBoomerang();
+        showToast('📸 Kamera aktif! Pilih pose dan jepret.');
+    }catch(e){
+        showToast('⚠️ Kamera tidak dapat diakses. Gunakan 🖼️ Galeri HP.');
+    }
+}
+function switchCameraFacing(){
+    currentFacing=currentFacing==='user'?'environment':'user';
+    if(guestStream)startGuestCamera();
+    playBeep(880,.06);
+}
+function selectPoseSlot(i){
+    const total=LAYOUT_CONFIGS[stripLayout].total;
+    activePose=i%total;
+    const ind=document.getElementById('camera-slot-indicator');
+    if(ind)ind.textContent=`Slot: Pose #${activePose+1}`;
+    for(let j=0;j<total;j++){
+        document.getElementById(`slot-btn-${j}`)?.classList.toggle('active',j===activePose);
+    }
+}
+function captureSlot(slot){
+    const v=document.getElementById('guest-camera-video');
+    if(!guestStream||v.classList.contains('hidden')){
+        showToast('⚠️ Aktifkan kamera terlebih dahulu!');
+        return false;
+    }
+    flash();
+    const tmp=document.createElement('canvas');
+    tmp.width=800;tmp.height=600;
+    const cx=tmp.getContext('2d');
+    const vw=v.videoWidth||640,vh=v.videoHeight||480;
+    let sx=0,sy=0,sw=vw,sh=vh;
+    const r=4/3;
+    if(vw/vh>r){sw=vh*r;sx=(vw-sw)/2}else{sh=vw/r;sy=(vh-sh)/2}
+    cx.save();
+    if(currentFacing==='user'){cx.translate(tmp.width,0);cx.scale(-1,1)}
+    cx.drawImage(v,sx,sy,sw,sh,0,0,800,600);
+    cx.restore();
+    const img=new Image();
+    img.onload=()=>{guestImages[slot]=img;renderCanvas()};
+    img.src=tmp.toDataURL('image/jpeg',.92);
+    return true;
+}
+function captureSinglePose(){
+    const total=LAYOUT_CONFIGS[stripLayout].total;
+    if(captureSlot(activePose)){
+        showToast(`✅ Pose #${activePose+1} berhasil dijepret!`);
+        selectPoseSlot((activePose+1)%total);
+    }
+}
+async function startAutoPoseBooth(){
+    const total=LAYOUT_CONFIGS[stripLayout].total;
+    if(!guestStream){
+        await startGuestCamera();
+        if(!guestStream)return;
+        await new Promise(r=>setTimeout(r,400));
+    }
+    const box=document.getElementById('guest-booth-countdown'),lbl=document.getElementById('guest-booth-pose-label'),num=document.getElementById('guest-booth-cd-num');
+    box.classList.remove('hidden');
+    for(let p=0;p<total;p++){
+        selectPoseSlot(p);
+        lbl.textContent=`🎯 SIAP POSE #${p+1} / ${total}`;
+        for(let c=3;c>=1;c--){
+            num.textContent=c;
+            num.classList.remove('cd-pop');
+            void num.offsetWidth;
+            num.classList.add('cd-pop');
+            playBeep(760+(3-c)*60,.12);
+            await new Promise(r=>setTimeout(r,850));
+        }
+        num.textContent='📸';
+        captureSlot(p);
+        await new Promise(r=>setTimeout(r,650));
+    }
+    box.classList.add('hidden');
+    showToast(`🎉 Semua ${total} pose selesai! Edit filter & stiker, lalu unduh.`);
+}
+const startAuto3PoseBooth=startAutoPoseBooth;
+
+function handleGalleryUpload(e){
+    const f=e.target.files[0];
+    if(!f)return;
+    const r=new FileReader();
+    r.onload=ev=>{
+        const img=new Image();
+        img.onload=()=>{
+            const total=LAYOUT_CONFIGS[stripLayout].total;
+            guestImages[activePose]=img;
+            renderCanvas();
+            showToast(`🖼️ Foto masuk ke Pose #${activePose+1}!`);
+            selectPoseSlot((activePose+1)%total);
+        };
+        img.src=ev.target.result;
+    };
+    r.readAsDataURL(f);
+    e.target.value='';
+}
 
 /* === CANVAS RENDER FR-10 to FR-13 === */
-const guestImages=[new Image(),new Image(),new Image()];
-const DEFAULT_URLS=['https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=800&q=80','https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=800&q=80','https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=800&q=80'];
-DEFAULT_URLS.forEach((u,i)=>{guestImages[i].crossOrigin='anonymous';guestImages[i].onload=()=>renderCanvas();guestImages[i].src=u});
+const DEFAULT_URLS=[
+    'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80'
+];
+const guestImages=DEFAULT_URLS.map(u=>{
+    const img=new Image();
+    img.crossOrigin='anonymous';
+    img.onload=()=>renderCanvas();
+    img.src=u;
+    return img;
+});
 
 function setGuestFilter(m){guestFilter=m;['none','warm','bw','sepia','rose'].forEach(k=>{document.getElementById(`gf-${k}`)?.classList.toggle('active',k===m)});renderCanvas();playBeep(920,.05)}
 function setGuestPaper(bg,tx,ac){bgColor=bg;textColor=tx;accentColor=ac;renderCanvas();playBeep(840,.05)}
-function addSticker(t){stickers.push({text:t,x:300+(Math.random()*140-70),y:500+(Math.random()*300-150),size:t.length>2?30:58});selectedSticker=stickers.length-1;playBeep(1080,.05);renderCanvas()}
+function addSticker(t){stickers.push({text:t,x:300+(Math.random()*140-70),y:500+(Math.random()*240-120),size:t.length>2?30:58});selectedSticker=stickers.length-1;playBeep(1080,.05);renderCanvas()}
 function resizeSticker(f){if(selectedSticker<0){showToast('👆 Sentuh stiker terlebih dahulu!');return}const s=stickers[selectedSticker];s.size=Math.max(16,Math.min(140,s.size*f));renderCanvas()}
 function deleteSticker(){if(selectedSticker<0){showToast('👆 Pilih stiker yang ingin dihapus!');return}stickers.splice(selectedSticker,1);selectedSticker=-1;renderCanvas();playBeep(440,.1)}
 
 function renderCanvas(hideRing=false){
     const canvas=document.getElementById('guest-strip-canvas');if(!canvas)return;
-    const ctx=canvas.getContext('2d');const W=600,H=1620;
+    const ctx=canvas.getContext('2d');
+    const cfg=LAYOUT_CONFIGS[stripLayout]||LAYOUT_CONFIGS['1x3'];
+    const W=cfg.canvasW,H=cfg.canvasH;
+    canvas.width=W;canvas.height=H;
+
     ctx.fillStyle=bgColor;ctx.fillRect(0,0,W,H);
     ctx.strokeStyle=accentColor;ctx.lineWidth=5;ctx.strokeRect(14,14,W-28,H-28);
     ctx.fillStyle=textColor;ctx.font='bold 15px "Courier Prime",Courier,monospace';ctx.textAlign='left';ctx.textBaseline='alphabetic';
     ctx.fillText('ANALOG PHOTOBOX \u2022 35MM',32,52);ctx.textAlign='right';ctx.fillText('#RAMA-SINTA-2026',W-32,52);
-    const FX=40,FW=W-80,FH=365,GAP=26,SY=76;
-    for(let i=0;i<3;i++){
-        const fy=SY+i*(FH+GAP);
-        ctx.fillStyle='#0a0a0a';ctx.fillRect(FX-5,fy-5,FW+10,FH+10);
+
+    const cols=cfg.cols,rows=cfg.rows;
+    const padX=cols===1?40:34;
+    const gapX=cols>1?16:0;
+    const gapY=cols===1?24:16;
+    const startY=76;
+    const cellW=(W-(padX*2)-((cols-1)*gapX))/cols;
+    const cellH=cols===1?365:(cellW*0.75);
+
+    for(let i=0;i<cfg.total;i++){
+        const c=i%cols;
+        const r=Math.floor(i/cols);
+        const fx=padX+c*(cellW+gapX);
+        const fy=startY+r*(cellH+gapY);
+
+        ctx.fillStyle='#0a0a0a';ctx.fillRect(fx-4,fy-4,cellW+8,cellH+8);
         const img=guestImages[i];
         if(img&&img.complete&&img.naturalWidth>0){
             ctx.save();
@@ -706,30 +1092,362 @@ function renderCanvas(hideRing=false){
             else if(guestFilter==='warm')ctx.filter='sepia(25%) contrast(108%) saturate(118%) brightness(103%)';
             else if(guestFilter==='rose')ctx.filter='contrast(106%) saturate(128%) hue-rotate(-12deg) brightness(101%)';
             else ctx.filter='none';
-            const iw=img.naturalWidth,ih=img.naturalHeight,fr=FW/FH;
+            const iw=img.naturalWidth,ih=img.naturalHeight,fr=cellW/cellH;
             let sx=0,sy=0,sw=iw,sh=ih;
             if(iw/ih>fr){sw=ih*fr;sx=(iw-sw)/2}else{sh=iw/fr;sy=(ih-sh)/2}
-            ctx.drawImage(img,sx,sy,sw,sh,FX,fy,FW,FH);ctx.restore();
-            if(guestFilter==='sepia'){ctx.fillStyle='rgba(100,55,15,.24)';ctx.fillRect(FX,fy,FW,FH)}
-            else if(guestFilter==='rose'){ctx.fillStyle='rgba(220,115,140,.18)';ctx.fillRect(FX,fy,FW,FH)}
-            else if(guestFilter==='warm'){ctx.fillStyle='rgba(255,160,60,.08)';ctx.fillRect(FX,fy,FW,FH)}
-        }else{ctx.fillStyle='#1a1a1a';ctx.fillRect(FX,fy,FW,FH);ctx.fillStyle='#333';ctx.font='bold 22px "Courier Prime",monospace';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(`\uD83D\uDCF7 Pose ${i+1}`,FX+FW/2,fy+FH/2)}
-        ctx.save();ctx.fillStyle='#FF6B2B';ctx.shadowColor='#FF6B2B';ctx.shadowBlur=8;ctx.font='bold 17px "Courier Prime",Courier,monospace';ctx.textAlign='right';ctx.textBaseline='alphabetic';ctx.fillText(`'26 10 24  0${i+1}`,FX+FW-14,fy+FH-14);ctx.restore();
+            ctx.drawImage(img,sx,sy,sw,sh,fx,fy,cellW,cellH);ctx.restore();
+            if(guestFilter==='sepia'){ctx.fillStyle='rgba(100,55,15,.24)';ctx.fillRect(fx,fy,cellW,cellH)}
+            else if(guestFilter==='rose'){ctx.fillStyle='rgba(220,115,140,.18)';ctx.fillRect(fx,fy,cellW,cellH)}
+            else if(guestFilter==='warm'){ctx.fillStyle='rgba(255,160,60,.08)';ctx.fillRect(fx,fy,cellW,cellH)}
+        }else{
+            ctx.fillStyle='#1a1a1a';ctx.fillRect(fx,fy,cellW,cellH);
+            ctx.fillStyle='#444';ctx.font='bold 20px "Courier Prime",monospace';ctx.textAlign='center';ctx.textBaseline='middle';
+            ctx.fillText(`\uD83D\uDCF7 Pose ${i+1}`,fx+cellW/2,fy+cellH/2);
+        }
+        ctx.save();ctx.fillStyle='#FF6B2B';ctx.shadowColor='#FF6B2B';ctx.shadowBlur=8;
+        ctx.font=cols===1?'bold 16px "Courier Prime",Courier,monospace':'bold 12px "Courier Prime",Courier,monospace';
+        ctx.textAlign='right';ctx.textBaseline='alphabetic';
+        ctx.fillText(`'26 10 24  0${i+1}`,fx+cellW-10,fy+cellH-10);ctx.restore();
     }
-    const FT=SY+3*(FH+GAP)+14;
+
+    const FT=startY+rows*(cellH+gapY)+12;
     ctx.strokeStyle=accentColor;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(50,FT);ctx.lineTo(W-50,FT);ctx.stroke();
     ctx.fillStyle=accentColor;ctx.beginPath();ctx.moveTo(W/2,FT-6);ctx.lineTo(W/2+5,FT);ctx.lineTo(W/2,FT+6);ctx.lineTo(W/2-5,FT);ctx.closePath();ctx.fill();
+
     const cap=(document.getElementById('guest-strip-caption')?.value||guestName).toUpperCase();
-    ctx.fillStyle=accentColor;ctx.font='bold 16px "Courier Prime",Courier,monospace';ctx.textAlign='center';ctx.textBaseline='alphabetic';ctx.fillText(`\u2605  ${cap}  \u2605`,W/2,FT+36);
-    ctx.fillStyle=textColor;ctx.font='italic 18px "Playfair Display",Georgia,serif';ctx.fillText('The Wedding Of',W/2,FT+70);
-    ctx.font='bold 50px "Playfair Display",Georgia,serif';ctx.fillText('Rama & Sinta',W/2,FT+124);
-    ctx.fillStyle=accentColor;ctx.font='bold 18px "Courier Prime",Courier,monospace';ctx.fillText('SABTU, 24 OKTOBER 2026',W/2,FT+160);
-    ctx.fillStyle=textColor;ctx.font='bold 15px "Plus Jakarta Sans",Arial,sans-serif';ctx.fillText('\uD83D\uDCCD Glass House \u2014 The Dharmawangsa Jakarta',W/2,FT+194);
-    ctx.font='13px "Courier Prime",Courier,monospace';ctx.fillText('Jl. Brawijaya Raya No. 26, Kebayoran Baru, Jakarta Selatan',W/2,FT+218);
-    ctx.strokeStyle=accentColor;ctx.lineWidth=1;ctx.setLineDash([3,3]);ctx.beginPath();ctx.moveTo(60,FT+238);ctx.lineTo(W-60,FT+238);ctx.stroke();ctx.setLineDash([]);
-    ctx.fillStyle=textColor;ctx.globalAlpha=.5;ctx.font='11px "Courier Prime",Courier,monospace';ctx.fillText('OFFICIAL DIGITAL PHOTOBOX SOUVENIR',W/2,H-46);ctx.fillText('THANK YOU FOR CELEBRATING WITH US',W/2,H-28);ctx.globalAlpha=1;
+    ctx.fillStyle=accentColor;ctx.font='bold 15px "Courier Prime",Courier,monospace';ctx.textAlign='center';ctx.textBaseline='alphabetic';
+    ctx.fillText(`\u2605  ${cap}  \u2605`,W/2,FT+32);
+
+    ctx.fillStyle=textColor;ctx.font='italic 16px "Playfair Display",Georgia,serif';
+    ctx.fillText('The Wedding Of',W/2,FT+62);
+    ctx.font='bold 44px "Playfair Display",Georgia,serif';
+    ctx.fillText('Rama & Sinta',W/2,FT+112);
+    ctx.fillStyle=accentColor;ctx.font='bold 16px "Courier Prime",Courier,monospace';
+    ctx.fillText('SABTU, 24 OKTOBER 2026',W/2,FT+146);
+    ctx.fillStyle=textColor;ctx.font='bold 14px "Plus Jakarta Sans",Arial,sans-serif';
+    ctx.fillText('\uD83D\uDCCD Glass House \u2014 The Dharmawangsa Jakarta',W/2,FT+176);
+    ctx.font='12px "Courier Prime",Courier,monospace';
+    ctx.fillText('Jl. Brawijaya Raya No. 26, Kebayoran Baru, Jakarta Selatan',W/2,FT+198);
+    ctx.strokeStyle=accentColor;ctx.lineWidth=1;ctx.setLineDash([3,3]);ctx.beginPath();ctx.moveTo(60,FT+216);ctx.lineTo(W-60,FT+216);ctx.stroke();ctx.setLineDash([]);
+    ctx.fillStyle=textColor;ctx.globalAlpha=.5;ctx.font='11px "Courier Prime",Courier,monospace';
+    ctx.fillText('OFFICIAL DIGITAL PHOTOBOX SOUVENIR',W/2,H-38);
+    ctx.fillText('THANK YOU FOR CELEBRATING WITH US',W/2,H-22);
+    ctx.globalAlpha=1;
+
     ctx.textBaseline='middle';
-    stickers.forEach((st,i)=>{ctx.save();ctx.textAlign='center';if(st.text.length>2){ctx.font=`bold ${st.size}px "Caveat",cursive`;const w=ctx.measureText(st.text).width,ph=12,pv=8;ctx.fillStyle='#B84A39';ctx.beginPath();if(ctx.roundRect)ctx.roundRect(st.x-w/2-ph,st.y-st.size/2-pv,w+ph*2,st.size+pv*2,6);else ctx.rect(st.x-w/2-ph,st.y-st.size/2-pv,w+ph*2,st.size+pv*2);ctx.fill();ctx.strokeStyle='#FCFBF7';ctx.lineWidth=1.5;ctx.stroke();ctx.fillStyle='#FCFBF7';ctx.fillText(st.text,st.x,st.y)}else{ctx.font=`${st.size}px sans-serif`;ctx.fillText(st.text,st.x,st.y)}if(!hideRing&&i===selectedSticker){ctx.strokeStyle='#C99E5A';ctx.lineWidth=3;ctx.setLineDash([7,5]);ctx.beginPath();ctx.arc(st.x,st.y,st.size*.9,0,Math.PI*2);ctx.stroke();ctx.setLineDash([])}ctx.restore()});
+    stickers.forEach((st,i)=>{
+        st.x=Math.max(30,Math.min(W-30,st.x));
+        st.y=Math.max(30,Math.min(H-30,st.y));
+        ctx.save();ctx.textAlign='center';
+        if(st.text.length>2){
+            ctx.font=`bold ${st.size}px "Caveat",cursive`;const w=ctx.measureText(st.text).width,ph=12,pv=8;
+            ctx.fillStyle='#B84A39';ctx.beginPath();
+            if(ctx.roundRect)ctx.roundRect(st.x-w/2-ph,st.y-st.size/2-pv,w+ph*2,st.size+pv*2,6);
+            else ctx.rect(st.x-w/2-ph,st.y-st.size/2-pv,w+ph*2,st.size+pv*2);
+            ctx.fill();ctx.strokeStyle='#FCFBF7';ctx.lineWidth=1.5;ctx.stroke();ctx.fillStyle='#FCFBF7';
+            ctx.fillText(st.text,st.x,st.y);
+        }else{
+            ctx.font=`${st.size}px sans-serif`;ctx.fillText(st.text,st.x,st.y);
+        }
+        if(!hideRing&&i===selectedSticker){
+            ctx.strokeStyle='#C99E5A';ctx.lineWidth=3;ctx.setLineDash([7,5]);
+            ctx.beginPath();ctx.arc(st.x,st.y,st.size*.9,0,Math.PI*2);ctx.stroke();ctx.setLineDash([]);
+        }
+        ctx.restore();
+    });
+}
+
+/* === BOOMERANG STUDIO ENGINE === */
+let studioMode='strip';
+let boomerangFrames=[];
+let boomerangIndex=0;
+let boomerangDir=1;
+let boomerangPlaying=true;
+let boomerangSpeed=1.0;
+let boomerangFilter='none';
+let boomerangTimer=null;
+let isRecordingBoomerang=false;
+
+function switchStudioMode(mode){
+    studioMode=mode;
+    const stripBox=document.getElementById('studio-strip-mode');
+    const bmBox=document.getElementById('studio-boomerang-mode');
+    const btnStrip=document.getElementById('mode-btn-strip');
+    const btnBm=document.getElementById('mode-btn-boomerang');
+    
+    if(mode==='boomerang'){
+        stripBox.classList.add('hidden');
+        bmBox.classList.remove('hidden');
+        btnStrip.classList.remove('active');
+        btnBm.classList.add('active');
+        syncCameraToBoomerang();
+        if(boomerangFrames.length===0){
+            createBoomerangFromPhotos();
+        }else{
+            startBoomerangLoop();
+        }
+    }else{
+        stripBox.classList.remove('hidden');
+        bmBox.classList.add('hidden');
+        btnStrip.classList.add('active');
+        btnBm.classList.remove('active');
+        stopBoomerangLoop();
+        renderCanvas();
+    }
+    playBeep(920,.05);
+}
+
+function syncCameraToBoomerang(){
+    const v=document.getElementById('bm-camera-video');
+    const ph=document.getElementById('bm-camera-placeholder');
+    if(!v||!ph)return;
+    if(guestStream){
+        v.srcObject=guestStream;
+        v.style.transform=currentFacing==='user'?'scaleX(-1)':'scaleX(1)';
+        v.classList.remove('hidden');
+        ph.classList.add('hidden');
+    }else{
+        v.classList.add('hidden');
+        ph.classList.remove('hidden');
+    }
+}
+
+async function recordLiveBoomerang(){
+    if(isRecordingBoomerang)return;
+    if(!guestStream){
+        await startGuestCamera();
+        if(!guestStream)return;
+        syncCameraToBoomerang();
+        await new Promise(r=>setTimeout(r,400));
+    }
+    syncCameraToBoomerang();
+    const ov=document.getElementById('bm-record-overlay');
+    const num=document.getElementById('bm-cd-num');
+    const statusText=document.getElementById('bm-status-text');
+    const pBar=document.getElementById('bm-progress-bar');
+    
+    ov.classList.remove('hidden');
+    statusText.textContent='BERSIAP...';
+    pBar.style.width='0%';
+    
+    for(let c=3;c>=1;c--){
+        num.textContent=c;
+        num.classList.remove('cd-pop');
+        void num.offsetWidth;
+        num.classList.add('cd-pop');
+        playBeep(750+(3-c)*60,.12);
+        await new Promise(r=>setTimeout(r,800));
+    }
+    
+    isRecordingBoomerang=true;
+    statusText.textContent='MEREKAM GERAKAN ●';
+    num.textContent='🎬';
+    
+    const v=document.getElementById('guest-camera-video');
+    const burstFrames=[];
+    const totalBurst=16;
+    const intervalMs=90;
+    
+    for(let f=0;f<totalBurst;f++){
+        pBar.style.width=`${((f+1)/totalBurst)*100}%`;
+        const tmp=document.createElement('canvas');
+        tmp.width=400;tmp.height=400;
+        const cx=tmp.getContext('2d');
+        const vw=v.videoWidth||640,vh=v.videoHeight||480;
+        const sq=Math.min(vw,vh);
+        const sx=(vw-sq)/2,sy=(vh-sq)/2;
+        cx.save();
+        if(currentFacing==='user'){cx.translate(tmp.width,0);cx.scale(-1,1)}
+        cx.drawImage(v,sx,sy,sq,sq,0,0,400,400);
+        cx.restore();
+        burstFrames.push(tmp);
+        playTone(900+f*20,.04,'triangle',.05);
+        await new Promise(r=>setTimeout(r,intervalMs));
+    }
+    
+    isRecordingBoomerang=false;
+    ov.classList.add('hidden');
+    boomerangFrames=burstFrames;
+    boomerangIndex=0;
+    boomerangDir=1;
+    startBoomerangLoop();
+    flash();
+    showToast('🎉 Boomerang live berhasil direkam! Nikmati efek putaran maju-mundur.');
+}
+
+function createBoomerangFromPhotos(){
+    const total=LAYOUT_CONFIGS[stripLayout].total;
+    const frames=[];
+    for(let i=0;i<total;i++){
+        const img=guestImages[i];
+        if(img&&img.complete&&img.naturalWidth>0){
+            const tmp=document.createElement('canvas');
+            tmp.width=400;tmp.height=400;
+            const cx=tmp.getContext('2d');
+            const sq=Math.min(img.naturalWidth,img.naturalHeight);
+            const sx=(img.naturalWidth-sq)/2,sy=(img.naturalHeight-sq)/2;
+            cx.drawImage(img,sx,sy,sq,sq,0,0,400,400);
+            frames.push(tmp);
+            frames.push(tmp);
+        }
+    }
+    if(frames.length>0){
+        boomerangFrames=frames;
+        boomerangIndex=0;
+        boomerangDir=1;
+        startBoomerangLoop();
+        showToast('✨ Boomerang berhasil dibuat dari pose fotomu!');
+    }else{
+        showToast('⚠️ Belum ada foto yang tersedia.');
+    }
+}
+
+function drawBoomerangFrame(){
+    const cv=document.getElementById('boomerang-canvas');
+    if(!cv||boomerangFrames.length===0)return;
+    const ctx=cv.getContext('2d');
+    const fImg=boomerangFrames[boomerangIndex];
+    if(!fImg)return;
+    
+    ctx.save();
+    if(boomerangFilter==='bw')ctx.filter='grayscale(100%) contrast(120%)';
+    else if(boomerangFilter==='sepia')ctx.filter='sepia(80%) contrast(110%)';
+    else if(boomerangFilter==='warm')ctx.filter='sepia(25%) saturate(120%)';
+    else ctx.filter='none';
+    
+    ctx.drawImage(fImg,0,0,cv.width,cv.height);
+    ctx.restore();
+    
+    const info=document.getElementById('bm-frame-info');
+    if(info)info.textContent=`Frame: ${boomerangIndex+1} / ${boomerangFrames.length}`;
+}
+
+function startBoomerangLoop(){
+    stopBoomerangLoop();
+    boomerangPlaying=true;
+    updateBoomerangPlayBtn();
+    
+    function loop(){
+        if(!boomerangPlaying||boomerangFrames.length===0)return;
+        drawBoomerangFrame();
+        
+        boomerangIndex+=boomerangDir;
+        if(boomerangIndex>=boomerangFrames.length-1){
+            boomerangIndex=boomerangFrames.length-1;
+            boomerangDir=-1;
+        }else if(boomerangIndex<=0){
+            boomerangIndex=0;
+            boomerangDir=1;
+        }
+        
+        const delay=Math.round(90/boomerangSpeed);
+        boomerangTimer=setTimeout(loop,delay);
+    }
+    loop();
+}
+
+function stopBoomerangLoop(){
+    if(boomerangTimer){clearTimeout(boomerangTimer);boomerangTimer=null;}
+}
+
+function toggleBoomerangPlay(){
+    boomerangPlaying=!boomerangPlaying;
+    if(boomerangPlaying)startBoomerangLoop();
+    else stopBoomerangLoop();
+    updateBoomerangPlayBtn();
+}
+
+function updateBoomerangPlayBtn(){
+    const icon=document.getElementById('bm-play-icon');
+    const txt=document.getElementById('bm-play-text');
+    if(icon&&txt){
+        icon.innerHTML=boomerangPlaying?'&#10074;&#10074;':'&#9658;';
+        txt.textContent=boomerangPlaying?'Pause':'Play';
+    }
+}
+
+function setBoomerangSpeed(sp){
+    boomerangSpeed=sp;
+    ['slow','norm','fast'].forEach(k=>{
+        const b=document.getElementById(`bms-${k}`);
+        if(b){
+            b.className='font-mono text-[10px] px-2 py-0.5 rounded border border-zinc-700 text-zinc-300 hover:border-gold cursor-pointer';
+            b.style.background='#1a1815';
+        }
+    });
+    const key=sp===0.6?'slow':(sp===1.6?'fast':'norm');
+    const activeBtn=document.getElementById(`bms-${key}`);
+    if(activeBtn){
+        activeBtn.className='font-mono text-[10px] px-2 py-0.5 rounded border border-gold text-gold font-bold cursor-pointer';
+        activeBtn.style.background='#2a2010';
+    }
+    playBeep(920,.04);
+}
+
+function setBoomerangFilter(flt){
+    boomerangFilter=flt;
+    ['none','warm','bw','sepia'].forEach(k=>{
+        document.getElementById(`bmf-${k}`)?.classList.toggle('active',k===flt);
+    });
+    drawBoomerangFrame();
+    playBeep(880,.04);
+}
+
+function useBoomerangFrameForSlot(){
+    if(boomerangFrames.length===0){
+        showToast('⚠️ Belum ada frame boomerang yang dipilih.');
+        return;
+    }
+    const cv=document.getElementById('boomerang-canvas');
+    const img=new Image();
+    img.onload=()=>{
+        guestImages[activePose]=img;
+        renderCanvas();
+        showToast(`✅ Frame Boomerang berhasil dimasukkan ke Pose #${activePose+1}!`);
+        switchStudioMode('strip');
+    };
+    img.src=cv.toDataURL('image/jpeg',.92);
+}
+
+function downloadBoomerangVideo(){
+    const cv=document.getElementById('boomerang-canvas');
+    if(!cv||boomerangFrames.length===0){
+        showToast('⚠️ Buat atau rekam boomerang terlebih dahulu!');
+        return;
+    }
+    showToast('⏳ Sedang memproses video Boomerang...');
+    try{
+        if(typeof MediaRecorder!=='undefined'&&cv.captureStream){
+            const stream=cv.captureStream(30);
+            const recorder=new MediaRecorder(stream,{mimeType:'video/webm'});
+            const chunks=[];
+            recorder.ondataavailable=e=>{if(e.data.size>0)chunks.push(e.data);};
+            recorder.onstop=()=>{
+                const blob=new Blob(chunks,{type:'video/webm'});
+                const url=URL.createObjectURL(blob);
+                const a=document.createElement('a');
+                a.href=url;
+                a.download=`Boomerang_Rama_Sinta_${Date.now()}.webm`;
+                a.click();
+                playShutter();
+                showToast('✅ Video Boomerang (.webm) berhasil diunduh!');
+            };
+            recorder.start();
+            setTimeout(()=>{recorder.stop();},3200);
+        }else{
+            const a=document.createElement('a');
+            a.download=`Boomerang_Rama_Sinta_${Date.now()}.png`;
+            a.href=cv.toDataURL('image/png');
+            a.click();
+            showToast('✅ Pratinjau Boomerang berhasil disimpan!');
+        }
+    }catch(e){
+        const a=document.createElement('a');
+        a.download=`Boomerang_Rama_Sinta_${Date.now()}.png`;
+        a.href=cv.toDataURL('image/png');
+        a.click();
+        showToast('✅ Frame Boomerang berhasil disimpan!');
+    }
 }
 
 /* === STICKER DRAG FR-12 === */
@@ -759,12 +1477,14 @@ function submitRSVP(e){
     card.className='polaroid-card relative fade-slide-up';card.style.transform=`rotate(${rot}deg)`;
     const badge=status==='Hadir'?'bg-emerald-100 text-emerald-800':'bg-amber-100 text-amber-800';
     const w=Math.random()>.5?'washi-tape':'washi-pink';
-    card.innerHTML=`<div class="${w} w-20 h-5 absolute -top-2.5 left-1/2 -translate-x-1/2"></div><img src="${thumb}" alt="Strip" class="w-full rounded-sm mb-2 border border-zinc-200" style="aspect-ratio:600/1620;object-fit:cover"><div class="flex items-center justify-between border-b border-zinc-200 pb-1.5 mb-2"><span class="font-serif font-bold text-sm text-charcoal">${esc(name)}</span><span class="font-mono text-[10px] ${badge} px-2 py-0.5 rounded font-bold">${esc(status)}</span></div><p class="font-hand text-lg leading-snug text-zinc-800">"${esc(msg)}"</p><p class="font-mono text-[9px] text-zinc-400 mt-2 text-right">Baru saja</p>`;
+    card.innerHTML=`<div class="${w} w-20 h-5 absolute -top-2.5 left-1/2 -translate-x-1/2"></div><img src="${thumb}" alt="Strip" class="w-full rounded-sm mb-2 border border-zinc-200" style="max-height:280px;object-fit:contain;background:#111"><div class="flex items-center justify-between border-b border-zinc-200 pb-1.5 mb-2"><span class="font-serif font-bold text-sm text-charcoal">${esc(name)}</span><span class="font-mono text-[10px] ${badge} px-2 py-0.5 rounded font-bold">${esc(status)}</span></div><p class="font-hand text-lg leading-snug text-zinc-800">"${esc(msg)}"</p><p class="font-mono text-[9px] text-zinc-400 mt-2 text-right">Baru saja</p>`;
     wall.prepend(card);const c=document.getElementById('rsvp-count');c.textContent=parseInt(c.textContent)+1;
     document.getElementById('rsvp-message').value='';attachedStrip=null;playShutter();showToast('🎉 Ucapan & Strip berhasil ditempel di Papan Gabus!');
 }
 
-/* Initial canvas render */
+/* Initial Setup */
+updateCouplePoseUI();
+updateSlotButtons();
 renderCanvas();
 </script>
 </body>
