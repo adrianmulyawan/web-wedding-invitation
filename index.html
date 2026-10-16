@@ -85,26 +85,39 @@
 <!-- FLASH OVERLAY -->
 <div id="flash-overlay" class="fixed inset-0 bg-white pointer-events-none opacity-0 z-[9999]" style="transition:opacity .5s ease-out"></div>
 
-<!-- FLOATING SFX TOGGLE -->
-<div class="fixed top-4 right-4 z-[200] flex items-center gap-2">
+<!-- FLOATING SFX TOGGLE (Cover only to prevent navbar overlap) -->
+<div id="floating-sfx-container" class="fixed top-4 right-4 z-[200] flex items-center gap-2">
     <button id="btn-sfx" onclick="toggleSFX()" class="glass text-cream border border-gold/30 px-3 py-1.5 rounded-full text-[11px] font-mono flex items-center gap-1.5 shadow-xl hover:border-gold transition cursor-pointer">
         <span id="sfx-icon">&#128266;</span> <span id="sfx-label">SFX</span>
     </button>
 </div>
 
+<!-- HIDDEN YOUTUBE BACKGROUND AUDIO PLAYER -->
+<div id="youtube-audio-wrapper" style="position:fixed;bottom:-9999px;left:-9999px;width:1px;height:1px;overflow:hidden;pointer-events:none;opacity:0.01;">
+    <div id="yt-player"></div>
+</div>
+
 <!-- VINYL PLAYER -->
-<div id="vinyl-player" class="hidden fixed bottom-5 left-5 z-[200] items-center gap-3 glass border border-gold/35 p-2 pr-5 rounded-full shadow-2xl text-cream">
-    <button onclick="toggleMusic()" class="relative w-12 h-12 rounded-full bg-zinc-950 border-2 border-gold flex items-center justify-center overflow-hidden cursor-pointer">
+<div id="vinyl-player" class="hidden fixed bottom-4 left-3 sm:bottom-5 sm:left-5 z-[200] items-center gap-2.5 sm:gap-3 glass border border-gold/40 p-1.5 sm:p-2 pr-3.5 sm:pr-4 rounded-full shadow-2xl text-cream max-w-[calc(100vw-24px)]">
+    <button onclick="toggleMusic()" aria-label="Play / Pause Musik" class="relative w-11 h-11 sm:w-12 sm:h-12 shrink-0 rounded-full bg-zinc-950 border-2 border-gold flex items-center justify-center overflow-hidden cursor-pointer active:scale-95 transition">
         <div id="vinyl-disc" class="w-full h-full rounded-full flex items-center justify-center spin-vinyl" style="background:repeating-radial-gradient(#0a0a0a 0px,#0a0a0a 2px,#252525 3px,#111 4.5px,#0a0a0a 5px)">
-            <div class="w-4 h-4 rounded-full bg-terracotta border border-gold/60 flex items-center justify-center z-10">
+            <div class="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full bg-terracotta border border-gold/60 flex items-center justify-center z-10">
                 <div class="w-1.5 h-1.5 rounded-full bg-cream"></div>
             </div>
         </div>
     </button>
-    <div class="text-left">
-        <p class="text-[10px] font-mono uppercase tracking-[.2em] text-gold/80">&#9836; Now Playing</p>
-        <p id="music-status" class="text-xs font-semibold">Romantic Waltz</p>
+    <div class="text-left shrink-0 cursor-pointer pr-1" onclick="toggleMusic()">
+        <p class="text-[9px] font-mono uppercase tracking-[.18em] text-gold/80 flex items-center gap-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-gold animate-pulse"></span>
+            <span>Now Playing</span>
+        </p>
+        <p id="music-status" class="text-[11px] sm:text-xs font-semibold leading-tight text-white max-w-[150px] sm:max-w-none truncate">Senja Teduh Pelita ♫</p>
+        <p class="text-[9px] text-zinc-400 font-mono">MALIQ &amp; D'Essentials</p>
     </div>
+    <div class="h-6 w-[1px] bg-white/15 ml-0.5 mr-0.5"></div>
+    <button id="btn-sfx-vinyl" onclick="toggleSFX()" title="Bunyikan / Matikan Efek Suara" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/5 hover:bg-white/10 border border-gold/30 flex items-center justify-center text-xs text-cream cursor-pointer transition active:scale-90">
+        <span id="sfx-icon-vinyl">&#128266;</span>
+    </button>
 </div>
 
 <!-- TOAST -->
@@ -228,24 +241,25 @@
 ============================================================ -->
 <main id="main-invitation" class="hidden min-h-screen w-full pb-28 pt-5 px-3 md:px-6 flex flex-col items-center" style="background:linear-gradient(180deg,#0d0c0a 0%,#1F1D1A 10%)">
 
-    <!-- CLEAN FLOATING NAVIGATION BAR (Replaces crowded studio bar) -->
-    <div class="sticky top-3 z-30 w-full max-w-[440px] mb-4 px-1">
-        <nav class="glass border border-gold/40 rounded-full px-3 py-2 shadow-2xl text-cream flex items-center justify-between backdrop-blur-md">
-            <a href="#photostrip-paper" onclick="scrollToTarget('photostrip-paper',event)" class="flex items-center gap-1.5 font-serif font-bold text-sm text-gold hover:opacity-80 transition pl-1">
+    <!-- CLEAN FLOATING NAVIGATION BAR (Replaces crowded studio bar, mobile-optimized without overlap) -->
+    <div class="sticky top-2 sm:top-3 z-30 w-full max-w-[440px] mb-3 px-1 sm:px-2">
+        <nav class="glass border border-gold/40 rounded-full px-2 sm:px-3 py-1.5 sm:py-2 shadow-2xl text-cream flex items-center justify-between backdrop-blur-md w-full">
+            <a href="#photostrip-paper" onclick="scrollToTarget('photostrip-paper',event)" class="shrink-0 flex items-center gap-1 font-serif font-bold text-xs sm:text-sm text-gold hover:opacity-80 transition pl-1 pr-1.5 sm:pr-2 border-r border-gold/25" title="Rama & Sinta">
                 <span class="text-xs">✦</span>
-                <span class="tracking-wide">Rama &amp; Sinta</span>
+                <span class="tracking-wide hidden min-[370px]:inline">R &amp; S</span>
+                <span class="tracking-wide hidden min-[430px]:inline">&nbsp;Wedding</span>
             </a>
-            <div class="flex items-center gap-1 sm:gap-1.5">
-                <a href="#the-wedding-couple" onclick="scrollToTarget('the-wedding-couple',event)" class="font-mono text-[10px] sm:text-[11px] px-2.5 py-1 rounded-full text-zinc-300 hover:text-gold hover:bg-white/10 transition flex items-center gap-1 cursor-pointer">
+            <div class="flex items-center justify-around flex-1 gap-0.5 min-[360px]:gap-1 sm:gap-1.5 ml-1">
+                <a href="#the-wedding-couple" onclick="scrollToTarget('the-wedding-couple',event)" class="font-mono text-[9.5px] min-[360px]:text-[10px] sm:text-[11px] px-1.5 min-[360px]:px-2 sm:px-2.5 py-1 rounded-full text-zinc-300 hover:text-gold hover:bg-white/10 transition flex items-center gap-0.5 sm:gap-1 cursor-pointer whitespace-nowrap">
                     <span>💍</span><span>Mempelai</span>
                 </a>
-                <a href="#frame-event" onclick="scrollToTarget('frame-event',event)" class="font-mono text-[10px] sm:text-[11px] px-2.5 py-1 rounded-full text-zinc-300 hover:text-gold hover:bg-white/10 transition flex items-center gap-1 cursor-pointer">
+                <a href="#frame-event" onclick="scrollToTarget('frame-event',event)" class="font-mono text-[9.5px] min-[360px]:text-[10px] sm:text-[11px] px-1.5 min-[360px]:px-2 sm:px-2.5 py-1 rounded-full text-zinc-300 hover:text-gold hover:bg-white/10 transition flex items-center gap-0.5 sm:gap-1 cursor-pointer whitespace-nowrap">
                     <span>📅</span><span>Acara</span>
                 </a>
-                <a href="#guest-photobox-studio" onclick="scrollToTarget('guest-photobox-studio',event)" class="font-mono text-[10px] sm:text-[11px] font-bold px-2.5 py-1 rounded-full bg-gold/15 text-gold border border-gold/40 hover:bg-gold/25 transition flex items-center gap-1 cursor-pointer">
+                <a href="#guest-photobox-studio" onclick="scrollToTarget('guest-photobox-studio',event)" class="font-mono text-[9.5px] min-[360px]:text-[10px] sm:text-[11px] font-bold px-1.5 min-[360px]:px-2 sm:px-2.5 py-1 rounded-full bg-gold/15 text-gold border border-gold/40 hover:bg-gold/25 transition flex items-center gap-0.5 sm:gap-1 cursor-pointer whitespace-nowrap">
                     <span>📸</span><span>Photobox</span>
                 </a>
-                <a href="#rsvp-section" onclick="scrollToTarget('rsvp-section',event)" class="font-mono text-[10px] sm:text-[11px] px-2.5 py-1 rounded-full text-zinc-300 hover:text-gold hover:bg-white/10 transition flex items-center gap-1 cursor-pointer">
+                <a href="#rsvp-section" onclick="scrollToTarget('rsvp-section',event)" class="font-mono text-[9.5px] min-[360px]:text-[10px] sm:text-[11px] px-1.5 min-[360px]:px-2 sm:px-2.5 py-1 rounded-full text-zinc-300 hover:text-gold hover:bg-white/10 transition flex items-center gap-0.5 sm:gap-1 cursor-pointer whitespace-nowrap">
                     <span>✍️</span><span>RSVP</span>
                 </a>
             </div>
@@ -864,7 +878,71 @@ document.getElementById('guest-name-cover').textContent=guestName;
 if(guestName!=='Sahabat & Keluarga') document.getElementById('rsvp-name').value=guestName;
 document.getElementById('guest-strip-caption').value=guestName;
 
-/* === AUDIO (FR-03) === */
+/* === AUDIO & YOUTUBE PLAYER (Senja Teduh Pelita - MALIQ & D'Essentials) === */
+let ytPlayer=null,ytReady=false,userWantsMusic=false;
+
+// Load YouTube IFrame API asynchronously
+(function(){
+    const tag=document.createElement('script');
+    tag.src="https://www.youtube.com/iframe_api";
+    const first=document.getElementsByTagName('script')[0];
+    first.parentNode.insertBefore(tag,first);
+})();
+
+window.onYouTubeIframeAPIReady=function(){
+    try{
+        ytPlayer=new YT.Player('yt-player',{
+            height:'100',
+            width:'100',
+            videoId:'Xslebu0IYWE',
+            playerVars:{
+                autoplay:0,
+                controls:0,
+                disablekb:1,
+                fs:0,
+                loop:1,
+                playlist:'Xslebu0IYWE',
+                playsinline:1,
+                rel:0
+            },
+            events:{
+                onReady:function(){
+                    ytReady=true;
+                    if(userWantsMusic){
+                        playYouTubeSong();
+                    }
+                },
+                onStateChange:function(e){
+                    const disc=document.getElementById('vinyl-disc'),st=document.getElementById('music-status');
+                    if(e.data===YT.PlayerState.PLAYING){
+                        isMusicPlaying=true;
+                        if(disc)disc.style.animationPlayState='running';
+                        if(st)st.textContent='Senja Teduh Pelita ♫';
+                    }else if(e.data===YT.PlayerState.PAUSED||e.data===YT.PlayerState.ENDED){
+                        isMusicPlaying=false;
+                        if(disc)disc.style.animationPlayState='paused';
+                        if(st)st.textContent='Paused';
+                    }
+                }
+            }
+        });
+    }catch(err){console.warn('YouTube Iframe init:',err)}
+};
+
+function playYouTubeSong(){
+    if(ytPlayer&&typeof ytPlayer.playVideo==='function'){
+        try{
+            ytPlayer.unMute();
+            ytPlayer.setVolume(85);
+            ytPlayer.playVideo();
+            isMusicPlaying=true;
+            const disc=document.getElementById('vinyl-disc'),st=document.getElementById('music-status');
+            if(disc)disc.style.animationPlayState='running';
+            if(st)st.textContent='Senja Teduh Pelita ♫';
+        }catch(e){console.warn(e)}
+    }
+}
+
 function initAudio(){if(!audioCtx){const AC=window.AudioContext||window.webkitAudioContext;audioCtx=new AC()}if(audioCtx.state==='suspended')audioCtx.resume()}
 function playTone(f=880,d=.12,t='sine',v=.15){if(!sfxEnabled)return;try{initAudio();const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type=t;o.frequency.setValueAtTime(f,audioCtx.currentTime);g.gain.setValueAtTime(v,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+d);o.connect(g);g.connect(audioCtx.destination);o.start();o.stop(audioCtx.currentTime+d)}catch(e){}}
 function playCoin(){if(!sfxEnabled)return;playTone(987.77,.09,'sine',.2);setTimeout(()=>playTone(1318.51,.28,'sine',.25),90);setTimeout(()=>playTone(659.25,.15,'sine',.12),200)}
@@ -872,11 +950,50 @@ function playBeep(f=700,d=.14){playTone(f,d,'sine',.14)}
 function playShutter(){if(!sfxEnabled)return;try{initAudio();const n=Math.floor(audioCtx.sampleRate*.18),b=audioCtx.createBuffer(1,n,audioCtx.sampleRate),d=b.getChannelData(0);for(let i=0;i<n;i++)d[i]=(Math.random()*2-1)*Math.exp(-i/(audioCtx.sampleRate*.025));const s=audioCtx.createBufferSource();s.buffer=b;const g=audioCtx.createGain();g.gain.setValueAtTime(.4,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+.18);s.connect(g);g.connect(audioCtx.destination);s.start()}catch(e){}}
 function playPrinter(){if(!sfxEnabled)return;try{initAudio();const now=audioCtx.currentTime;for(let i=0;i<6;i++){const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='sawtooth';o.frequency.setValueAtTime(110+(i%2)*18,now+i*.32);g.gain.setValueAtTime(.035,now+i*.32);g.gain.exponentialRampToValueAtTime(.002,now+i*.32+.26);o.connect(g);g.connect(audioCtx.destination);o.start(now+i*.32);o.stop(now+i*.32+.28)}}catch(e){}}
 function flash(){playShutter();const f=document.getElementById('flash-overlay');f.style.transition='none';f.style.opacity='1';setTimeout(()=>{f.style.transition='opacity .5s ease-out';f.style.opacity='0'},80)}
-function toggleSFX(){sfxEnabled=!sfxEnabled;document.getElementById('sfx-icon').textContent=sfxEnabled?'🔊':'🔇';document.getElementById('sfx-label').textContent=sfxEnabled?'SFX':'Muted'}
 
-/* Music */
+function toggleSFX(){
+    sfxEnabled=!sfxEnabled;
+    const ic1=document.getElementById('sfx-icon'),lb1=document.getElementById('sfx-label'),ic2=document.getElementById('sfx-icon-vinyl');
+    if(ic1)ic1.textContent=sfxEnabled?'🔊':'🔇';
+    if(lb1)lb1.textContent=sfxEnabled?'SFX':'Muted';
+    if(ic2)ic2.textContent=sfxEnabled?'🔊':'🔇';
+    showToast(sfxEnabled?'🔊 Efek suara aktif':'🔇 Efek suara dinonaktifkan',1800);
+}
+
+/* Music Play / Pause */
 const MELODY=[523.25,587.33,659.25,698.46,783.99,698.46,659.25,587.33];let mIdx=0;
-function toggleMusic(){initAudio();const disc=document.getElementById('vinyl-disc'),st=document.getElementById('music-status');if(isMusicPlaying){clearInterval(musicInterval);isMusicPlaying=false;disc.style.animationPlayState='paused';st.textContent='Paused'}else{isMusicPlaying=true;disc.style.animationPlayState='running';st.textContent='Romantic Waltz ♫';musicInterval=setInterval(()=>{if(sfxEnabled)playTone(MELODY[mIdx++%MELODY.length],.48,'sine',.1)},660)}}
+function toggleMusic(){
+    initAudio();
+    const disc=document.getElementById('vinyl-disc'),st=document.getElementById('music-status');
+    if(ytPlayer&&ytReady&&typeof ytPlayer.getPlayerState==='function'){
+        if(isMusicPlaying){
+            ytPlayer.pauseVideo();
+            isMusicPlaying=false;
+            if(disc)disc.style.animationPlayState='paused';
+            if(st)st.textContent='Paused';
+        }else{
+            userWantsMusic=true;
+            playYouTubeSong();
+        }
+    }else{
+        userWantsMusic=!isMusicPlaying;
+        if(isMusicPlaying){
+            clearInterval(musicInterval);
+            isMusicPlaying=false;
+            if(disc)disc.style.animationPlayState='paused';
+            if(st)st.textContent='Paused';
+        }else{
+            isMusicPlaying=true;
+            if(disc)disc.style.animationPlayState='running';
+            if(st)st.textContent='Senja Teduh Pelita ♫';
+            if(ytPlayer&&typeof ytPlayer.playVideo==='function'){
+                playYouTubeSong();
+            }else{
+                musicInterval=setInterval(()=>{if(sfxEnabled)playTone(MELODY[mIdx++%MELODY.length],.48,'sine',.1)},660);
+            }
+        }
+    }
+}
 
 /* === TOAST === */
 function showToast(m,d=3200){const t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');t.style.animation='toastIn .3s ease forwards';clearTimeout(t._t);t._t=setTimeout(()=>t.classList.add('hidden'),d)}
@@ -888,6 +1005,10 @@ async function toggleCoverMirror(){const v=document.getElementById('cover-mirror
 /* === COIN SEQUENCE FR-03 === */
 function startPhotoboxExperience(){
     initAudio();playCoin();
+    userWantsMusic=true;
+    if(ytPlayer&&ytReady&&typeof ytPlayer.playVideo==='function'){
+        try{ytPlayer.unMute();ytPlayer.setVolume(85);ytPlayer.playVideo()}catch(e){}
+    }
     const coin=document.getElementById('coin-anim');
     coin.classList.remove('hidden','animate-coin');void coin.offsetWidth;coin.classList.add('animate-coin');
     document.getElementById('led-ready').style.background='#374151';
@@ -901,11 +1022,22 @@ function startPhotoboxExperience(){
 }
 function gotoMain(){
     if(coverStream){coverStream.getTracks().forEach(t=>t.stop());coverStream=null}
+    const coverSfx=document.getElementById('floating-sfx-container');
+    if(coverSfx)coverSfx.classList.add('hidden');
     document.getElementById('photobox-cover').classList.add('hidden');
     const m=document.getElementById('main-invitation');m.classList.remove('hidden');
     playPrinter();document.getElementById('photostrip-paper').classList.add('animate-print');
     const vp=document.getElementById('vinyl-player');vp.classList.remove('hidden');vp.classList.add('flex');
-    setTimeout(()=>{if(!isMusicPlaying)toggleMusic()},800);
+    userWantsMusic=true;
+    setTimeout(()=>{
+        if(!isMusicPlaying){
+            if(ytPlayer&&ytReady){
+                playYouTubeSong();
+            }else{
+                toggleMusic();
+            }
+        }
+    },600);
     renderCanvas();
 }
 
