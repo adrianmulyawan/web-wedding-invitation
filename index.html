@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
@@ -13,6 +13,7 @@
         tailwind.config={theme:{extend:{colors:{cream:'#F6F1E7',ivory:'#FCFBF7',terracotta:'#B84A39',charcoal:'#1F1D1A',gold:'#C99E5A',sage:'#6E7E6A',dustypink:'#E6CCD2'},fontFamily:{serif:['"Playfair Display"','Georgia','serif'],mono:['"Courier Prime"','monospace'],hand:['"Caveat"','cursive'],sans:['"Plus Jakarta Sans"','system-ui','sans-serif']}}}}
     </script>
     <style>
+        html{scroll-behavior:smooth!important;scroll-padding-top:75px}
         *,*::before,*::after{box-sizing:border-box}
         ::selection{background:#B84A39;color:#FCFBF7}
         ::-webkit-scrollbar{width:5px;height:5px}
@@ -230,21 +231,21 @@
     <!-- CLEAN FLOATING NAVIGATION BAR (Replaces crowded studio bar) -->
     <div class="sticky top-3 z-30 w-full max-w-[440px] mb-4 px-1">
         <nav class="glass border border-gold/40 rounded-full px-3 py-2 shadow-2xl text-cream flex items-center justify-between backdrop-blur-md">
-            <a href="#photostrip-paper" class="flex items-center gap-1.5 font-serif font-bold text-sm text-gold hover:opacity-80 transition pl-1">
+            <a href="#photostrip-paper" onclick="scrollToTarget('photostrip-paper',event)" class="flex items-center gap-1.5 font-serif font-bold text-sm text-gold hover:opacity-80 transition pl-1">
                 <span class="text-xs">✦</span>
                 <span class="tracking-wide">Rama &amp; Sinta</span>
             </a>
             <div class="flex items-center gap-1 sm:gap-1.5">
-                <a href="#frame-couple" class="font-mono text-[10px] sm:text-[11px] px-2.5 py-1 rounded-full text-zinc-300 hover:text-gold hover:bg-white/10 transition flex items-center gap-1">
+                <a href="#the-wedding-couple" onclick="scrollToTarget('the-wedding-couple',event)" class="font-mono text-[10px] sm:text-[11px] px-2.5 py-1 rounded-full text-zinc-300 hover:text-gold hover:bg-white/10 transition flex items-center gap-1 cursor-pointer">
                     <span>💍</span><span>Mempelai</span>
                 </a>
-                <a href="#frame-event" class="font-mono text-[10px] sm:text-[11px] px-2.5 py-1 rounded-full text-zinc-300 hover:text-gold hover:bg-white/10 transition flex items-center gap-1">
+                <a href="#frame-event" onclick="scrollToTarget('frame-event',event)" class="font-mono text-[10px] sm:text-[11px] px-2.5 py-1 rounded-full text-zinc-300 hover:text-gold hover:bg-white/10 transition flex items-center gap-1 cursor-pointer">
                     <span>📅</span><span>Acara</span>
                 </a>
-                <a href="#guest-photobox-studio" class="font-mono text-[10px] sm:text-[11px] font-bold px-2.5 py-1 rounded-full bg-gold/15 text-gold border border-gold/40 hover:bg-gold/25 transition flex items-center gap-1">
+                <a href="#guest-photobox-studio" onclick="scrollToTarget('guest-photobox-studio',event)" class="font-mono text-[10px] sm:text-[11px] font-bold px-2.5 py-1 rounded-full bg-gold/15 text-gold border border-gold/40 hover:bg-gold/25 transition flex items-center gap-1 cursor-pointer">
                     <span>📸</span><span>Photobox</span>
                 </a>
-                <a href="#rsvp-section" class="font-mono text-[10px] sm:text-[11px] px-2.5 py-1 rounded-full text-zinc-300 hover:text-gold hover:bg-white/10 transition flex items-center gap-1">
+                <a href="#rsvp-section" onclick="scrollToTarget('rsvp-section',event)" class="font-mono text-[10px] sm:text-[11px] px-2.5 py-1 rounded-full text-zinc-300 hover:text-gold hover:bg-white/10 transition flex items-center gap-1 cursor-pointer">
                     <span>✍️</span><span>RSVP</span>
                 </a>
             </div>
@@ -294,7 +295,7 @@
                     <span>Next Foto</span> &#10095;
                 </button>
             </div>
-            <div class="text-center mt-4 px-2">
+            <div id="the-wedding-couple" class="text-center mt-4 px-2 scroll-mt-24">
                 <p class="font-mono text-[10px] uppercase tracking-[.25em] text-terracotta font-bold">The Wedding Of</p>
                 <h2 class="font-serif text-4xl font-bold mt-1.5">Rama &amp; Sinta</h2>
                 <div class="mt-3 py-2.5 px-3 rounded-xl bg-current/5 border border-current/15">
@@ -621,17 +622,95 @@
                                 </button>
                             </div>
 
-                            <!-- Boomerang Interactive Player (Ping-Pong Loop) -->
+                            <!-- Boomerang Interactive Player (Ping-Pong Loop with Photobox Frame) -->
                             <div id="boomerang-player-box" class="rounded-xl p-3 border border-zinc-800 bg-black/70 space-y-3">
-                                <div class="flex items-center justify-between">
-                                    <span class="font-mono text-[10px] text-amber-300 font-bold uppercase tracking-wider">&#9658; PRATINJAU BOOMERANG LOOP</span>
+                                <!-- Top Info & Theme Switcher -->
+                                <div class="flex items-center justify-between pb-2 border-b border-zinc-800">
+                                    <div class="flex items-center gap-1.5">
+                                        <span class="font-mono text-[9px] uppercase tracking-wider text-gold/90">Kertas:</span>
+                                        <button onclick="setBoomerangTheme('strip-ivory')" title="Ivory" class="w-5 h-5 rounded-full border-2 border-gold cursor-pointer hover:scale-110 transition" style="background:#FCFBF7"></button>
+                                        <button onclick="setBoomerangTheme('strip-midnight')" title="Midnight" class="w-5 h-5 rounded-full border-2 border-zinc-500 cursor-pointer hover:scale-110 transition" style="background:#18181B"></button>
+                                        <button onclick="setBoomerangTheme('strip-pink')" title="Dusty Pink" class="w-5 h-5 rounded-full border-2 border-zinc-400 cursor-pointer hover:scale-110 transition" style="background:#F5E0E5"></button>
+                                        <button onclick="setBoomerangTheme('strip-sage')" title="Matcha Sage" class="w-5 h-5 rounded-full border-2 border-zinc-400 cursor-pointer hover:scale-110 transition" style="background:#DCE5D8"></button>
+                                    </div>
                                     <span id="bm-frame-info" class="font-mono text-[10px] text-zinc-400">Frame: 1 / 16</span>
                                 </div>
 
-                                <div class="relative flex justify-center overflow-hidden rounded-xl border-2 border-zinc-700 scanlines bg-zinc-950 mx-auto" style="max-width:300px;aspect-ratio:1/1">
-                                    <canvas id="boomerang-canvas" width="400" height="400" class="w-full h-full object-cover"></canvas>
-                                    <div class="absolute bottom-2 right-2.5 quartz-stamp text-[11px] pointer-events-none">'26 10 24</div>
-                                    <div class="absolute top-2 left-2.5 font-mono text-[9px] text-white/80 bg-black/60 px-2 py-0.5 rounded pointer-events-none">BOOMERANG 35MM</div>
+                                <!-- Authentic Photobox Souvenir Frame -->
+                                <div id="bm-photobox-card" class="w-full max-w-[320px] mx-auto strip-ivory rounded-2xl overflow-hidden shadow-2xl border-4 relative transition-colors duration-300" style="border-color:#DDD8CE;box-shadow:0 25px 60px rgba(0,0,0,.85)">
+                                    <!-- Strip Top Header -->
+                                    <div class="flex justify-between items-center text-[9px] font-mono opacity-65 px-3 py-1.5 border-b border-current/20">
+                                        <span>KODAK PORTRA 400</span>
+                                        <span>&#9658; BOOMERANG 35MM</span>
+                                        <span>#RS-2026</span>
+                                    </div>
+
+                                    <!-- 35mm Film Sprockets Row Top -->
+                                    <div class="sprocket-row bg-black/10 border-b border-current/10 py-1 px-3 flex justify-between">
+                                        <div class="sprocket bg-current opacity-30"></div>
+                                        <div class="sprocket bg-current opacity-30"></div>
+                                        <div class="sprocket bg-current opacity-30"></div>
+                                        <div class="sprocket bg-current opacity-30"></div>
+                                        <div class="sprocket bg-current opacity-30"></div>
+                                        <div class="sprocket bg-current opacity-30"></div>
+                                    </div>
+
+                                    <!-- Recessed Photo Slot -->
+                                    <div class="p-2.5">
+                                        <div class="relative overflow-hidden rounded-xl bg-black border-2 border-black/80 scanlines shadow-inner flex items-center justify-center" style="aspect-ratio:1/1">
+                                            <canvas id="boomerang-canvas" width="400" height="400" class="w-full h-full object-cover"></canvas>
+                                            
+                                            <!-- HUD Viewfinder Corners -->
+                                            <div class="absolute inset-0 pointer-events-none p-2">
+                                                <div class="absolute top-2 left-2 w-3.5 h-3.5 border-t-2 border-l-2 border-white/60"></div>
+                                                <div class="absolute top-2 right-2 w-3.5 h-3.5 border-t-2 border-r-2 border-white/60"></div>
+                                                <div class="absolute bottom-2 left-2 w-3.5 h-3.5 border-b-2 border-l-2 border-white/60"></div>
+                                                <div class="absolute bottom-2 right-2 w-3.5 h-3.5 border-b-2 border-r-2 border-white/60"></div>
+                                                <div class="absolute top-2 left-0 right-0 flex justify-between px-2.5">
+                                                    <span class="font-mono text-[8px] text-white/90 bg-black/60 px-1.5 py-0.5 rounded">LOOP 16F</span>
+                                                    <span class="font-mono text-[8px] text-red-400 bg-black/60 px-1.5 py-0.5 rounded flex items-center gap-1">
+                                                        <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span> PLAY
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <div class="absolute bottom-2 right-2.5 quartz-stamp text-[11px] pointer-events-none">'26 10 24</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- 35mm Film Sprockets Row Bottom -->
+                                    <div class="sprocket-row bg-black/10 border-t border-b border-current/10 py-1 px-3 flex justify-between">
+                                        <div class="sprocket bg-current opacity-30"></div>
+                                        <div class="sprocket bg-current opacity-30"></div>
+                                        <div class="sprocket bg-current opacity-30"></div>
+                                        <div class="sprocket bg-current opacity-30"></div>
+                                        <div class="sprocket bg-current opacity-30"></div>
+                                        <div class="sprocket bg-current opacity-30"></div>
+                                    </div>
+
+                                    <!-- Photobox Souvenir Footer -->
+                                    <div class="p-2.5 text-center">
+                                        <div class="flex items-center justify-center gap-2 mb-0.5">
+                                            <div class="h-[1px] w-6 bg-current opacity-30"></div>
+                                            <span class="font-mono text-[8px] uppercase tracking-widest text-terracotta font-bold">★ The Wedding Of ★</span>
+                                            <div class="h-[1px] w-6 bg-current opacity-30"></div>
+                                        </div>
+                                        <h4 class="font-serif font-bold text-lg leading-tight">Rama &amp; Sinta</h4>
+                                        <p class="font-mono text-[9px] opacity-75 mt-0.5">24 OKT 2026 &middot; THE DHARMAWANGSA JAKARTA</p>
+                                        
+                                        <!-- Barcode visual -->
+                                        <div class="flex items-center justify-between mt-2 pt-1.5 border-t border-current/20 opacity-60">
+                                            <span class="font-mono text-[8px]">DIGITAL PHOTOBOX SOUVENIR</span>
+                                            <div class="flex items-end h-3.5 gap-[2px]">
+                                                <div class="w-[2px] h-full bg-current"></div>
+                                                <div class="w-[1px] h-[80%] bg-current"></div>
+                                                <div class="w-[3px] h-full bg-current"></div>
+                                                <div class="w-[1px] h-[90%] bg-current"></div>
+                                                <div class="w-[2px] h-[75%] bg-current"></div>
+                                                <div class="w-[3px] h-full bg-current"></div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <!-- Player Controls: Speed & Filter -->
@@ -1393,6 +1472,25 @@ function setBoomerangFilter(flt){
     playBeep(880,.04);
 }
 
+let bmTheme='strip-ivory';
+function setBoomerangTheme(cls){
+    bmTheme=cls;
+    const card=document.getElementById('bm-photobox-card');
+    if(!card)return;
+    ['strip-ivory','strip-midnight','strip-pink','strip-sage'].forEach(c=>card.classList.remove(c));
+    card.classList.add(cls);
+    playBeep(840,.05);
+}
+
+function scrollToTarget(targetId,e){
+    if(e)e.preventDefault();
+    const el=document.getElementById(targetId);
+    if(el){
+        el.scrollIntoView({behavior:'smooth',block:'start'});
+        try{history.pushState(null,null,`#${targetId}`)}catch(err){}
+    }
+}
+
 function useBoomerangFrameForSlot(){
     if(boomerangFrames.length===0){
         showToast('⚠️ Belum ada frame boomerang yang dipilih.');
@@ -1409,44 +1507,122 @@ function useBoomerangFrameForSlot(){
     img.src=cv.toDataURL('image/jpeg',.92);
 }
 
+function renderBoomerangCardToCanvas(outCanvas,frameImg){
+    const W=480,H=680;
+    outCanvas.width=W;outCanvas.height=H;
+    const ctx=outCanvas.getContext('2d');
+    
+    let cardBg='#FCFBF7',cardText='#1F1D1A',cardAccent='#B84A39';
+    if(bmTheme==='strip-midnight'){cardBg='#18181B';cardText='#F6F1E7';cardAccent='#C99E5A'}
+    else if(bmTheme==='strip-pink'){cardBg='#F5E0E5';cardText='#2C1A1E';cardAccent='#9E3B4B'}
+    else if(bmTheme==='strip-sage'){cardBg='#DCE5D8';cardText='#1C261B';cardAccent='#4A6B4E'}
+    
+    ctx.fillStyle=cardBg;ctx.fillRect(0,0,W,H);
+    ctx.strokeStyle=cardAccent;ctx.lineWidth=4;ctx.strokeRect(10,10,W-20,H-20);
+    
+    ctx.fillStyle=cardText;ctx.font='bold 12px "Courier Prime",monospace';ctx.textAlign='left';
+    ctx.fillText('KODAK PORTRA 400',25,34);
+    ctx.textAlign='center';ctx.fillText('► BOOMERANG 35MM',W/2,34);
+    ctx.textAlign='right';ctx.fillText('#RS-2026',W-25,34);
+    
+    ctx.fillStyle=cardText;ctx.globalAlpha=0.25;
+    const spW=14,spH=9,spY=44;
+    for(let i=0;i<10;i++){const spX=30+i*((W-60-spW)/9);ctx.fillRect(spX,spY,spW,spH)}
+    ctx.globalAlpha=1.0;
+    
+    const phX=36,phY=62,phSize=W-72;
+    ctx.fillStyle='#0a0a0a';ctx.fillRect(phX-4,phY-4,phSize+8,phSize+8);
+    
+    if(frameImg){
+        ctx.save();
+        if(boomerangFilter==='bw')ctx.filter='grayscale(100%) contrast(120%)';
+        else if(boomerangFilter==='sepia')ctx.filter='sepia(80%) contrast(110%)';
+        else if(boomerangFilter==='warm')ctx.filter='sepia(25%) saturate(120%)';
+        else ctx.filter='none';
+        ctx.drawImage(frameImg,0,0,frameImg.width||400,frameImg.height||400,phX,phY,phSize,phSize);
+        ctx.restore();
+    }
+    
+    ctx.save();ctx.fillStyle='#FF6B2B';ctx.shadowColor='#FF6B2B';ctx.shadowBlur=8;ctx.font='bold 15px "Courier Prime",monospace';ctx.textAlign='right';
+    ctx.fillText("'26 10 24",phX+phSize-12,phY+phSize-12);ctx.restore();
+    
+    ctx.fillStyle=cardText;ctx.globalAlpha=0.25;
+    const bspY=phY+phSize+12;
+    for(let i=0;i<10;i++){const spX=30+i*((W-60-spW)/9);ctx.fillRect(spX,bspY,spW,spH)}
+    ctx.globalAlpha=1.0;
+    
+    const ftY=bspY+28;
+    ctx.strokeStyle=cardAccent;ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(40,ftY);ctx.lineTo(W-40,ftY);ctx.stroke();
+    ctx.fillStyle=cardAccent;ctx.font='bold 12px "Courier Prime",monospace';ctx.textAlign='center';
+    ctx.fillText('★ THE WEDDING OF ★',W/2,ftY+22);
+    ctx.fillStyle=cardText;ctx.font='bold 32px "Playfair Display",Georgia,serif';
+    ctx.fillText('Rama & Sinta',W/2,ftY+58);
+    ctx.fillStyle=cardAccent;ctx.font='bold 12px "Courier Prime",monospace';
+    ctx.fillText('SABTU, 24 OKTOBER 2026',W/2,ftY+84);
+    ctx.fillStyle=cardText;ctx.globalAlpha=0.7;ctx.font='11px "Plus Jakarta Sans",Arial,sans-serif';
+    ctx.fillText('📍 Glass House — The Dharmawangsa Jakarta',W/2,ftY+104);
+    ctx.globalAlpha=1.0;
+}
+
 function downloadBoomerangVideo(){
-    const cv=document.getElementById('boomerang-canvas');
-    if(!cv||boomerangFrames.length===0){
+    if(boomerangFrames.length===0){
         showToast('⚠️ Buat atau rekam boomerang terlebih dahulu!');
         return;
     }
-    showToast('⏳ Sedang memproses video Boomerang...');
+    showToast('⏳ Sedang memproses video Boomerang Photobox...');
+    
+    const expCanvas=document.createElement('canvas');
+    expCanvas.width=480;expCanvas.height=680;
+    
     try{
-        if(typeof MediaRecorder!=='undefined'&&cv.captureStream){
-            const stream=cv.captureStream(30);
+        if(typeof MediaRecorder!=='undefined'&&expCanvas.captureStream){
+            const stream=expCanvas.captureStream(30);
             const recorder=new MediaRecorder(stream,{mimeType:'video/webm'});
             const chunks=[];
-            recorder.ondataavailable=e=>{if(e.data.size>0)chunks.push(e.data);};
+            recorder.ondataavailable=e=>{if(e.data.size>0)chunks.push(e.data)};
             recorder.onstop=()=>{
                 const blob=new Blob(chunks,{type:'video/webm'});
                 const url=URL.createObjectURL(blob);
                 const a=document.createElement('a');
                 a.href=url;
-                a.download=`Boomerang_Rama_Sinta_${Date.now()}.webm`;
+                a.download=`Boomerang_Photobox_Rama_Sinta_${Date.now()}.webm`;
                 a.click();
                 playShutter();
-                showToast('✅ Video Boomerang (.webm) berhasil diunduh!');
+                showToast('✅ Video Boomerang Photobox (.webm) berhasil diunduh!');
             };
             recorder.start();
-            setTimeout(()=>{recorder.stop();},3200);
+            
+            // Loop ping-pong onto export canvas for 3.2 seconds
+            let recIdx=boomerangIndex,recDir=boomerangDir;
+            const recTimer=setInterval(()=>{
+                const fImg=boomerangFrames[recIdx];
+                renderBoomerangCardToCanvas(expCanvas,fImg);
+                recIdx+=recDir;
+                if(recIdx>=boomerangFrames.length-1){recIdx=boomerangFrames.length-1;recDir=-1}
+                else if(recIdx<=0){recIdx=0;recDir=1}
+            },Math.round(80/boomerangSpeed));
+            
+            setTimeout(()=>{
+                clearInterval(recTimer);
+                recorder.stop();
+            },3200);
         }else{
+            const fImg=boomerangFrames[boomerangIndex];
+            renderBoomerangCardToCanvas(expCanvas,fImg);
             const a=document.createElement('a');
-            a.download=`Boomerang_Rama_Sinta_${Date.now()}.png`;
-            a.href=cv.toDataURL('image/png');
+            a.download=`Boomerang_Photobox_Rama_Sinta_${Date.now()}.png`;
+            a.href=expCanvas.toDataURL('image/png');
             a.click();
-            showToast('✅ Pratinjau Boomerang berhasil disimpan!');
+            showToast('✅ Kartu Boomerang Photobox berhasil disimpan!');
         }
     }catch(e){
+        const fImg=boomerangFrames[boomerangIndex];
+        renderBoomerangCardToCanvas(expCanvas,fImg);
         const a=document.createElement('a');
-        a.download=`Boomerang_Rama_Sinta_${Date.now()}.png`;
-        a.href=cv.toDataURL('image/png');
+        a.download=`Boomerang_Photobox_Rama_Sinta_${Date.now()}.png`;
+        a.href=expCanvas.toDataURL('image/png');
         a.click();
-        showToast('✅ Frame Boomerang berhasil disimpan!');
+        showToast('✅ Frame Boomerang Photobox berhasil disimpan!');
     }
 }
 
